@@ -1,0 +1,226 @@
+{
+  "common": {
+    "dashboard": "Dashboard",
+    "invoices": "Invoices",
+    "items": "Items",
+    "settings": "Settings",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "actions": "Actions",
+    "search": "Search...",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+  "dashboard": {
+    "recentInvoices": "Recent Invoices",
+    "pendingInvoices": "Pending Invoices",
+    "overdueInvoices": "Overdue Invoices",
+    "totalAmount": "Total Amount"
+  },
+  "invoices": {
+    "title": "Invoices",
+    "subtitle": "Create, preview, update, and manage every invoice from the same workspace.",
+    "newInvoice": "New Invoice",
+    "create_invoice": "Create Invoice",
+    "create_invoice_title": "Create Invoice",
+    "create_invoice_subtitle": "Build polished invoices with reusable items, tax presets, and live totals.",
+    "edit_invoice_title": "Edit Invoice",
+    "edit_invoice_subtitle": "Update invoice details, line items, taxes, and template settings.",
+    "invoiceNumber": "Invoice Number",
+    "invoice_number": "Invoice Number",
+    "customer": "Customer",
+    "date": "Date",
+    "amount": "Amount",
+    "status": "Status",
+    "customerName": "Customer Name",
+    "customerEmail": "Customer Email",
+    "customer_name": "Customer Name",
+    "customer_email": "Customer Email",
+    "invoiceDate": "Invoice Date",
+    "invoice_date": "Invoice Date",
+    "taxType": "Tax Type",
+    "tax_type": "Tax Type",
+    "items": "Items",
+    "invoice_items": "Invoice Items",
+    "notes": "Notes",
+    "notes_description": "Add rich text notes that appear at the bottom of the invoice.",
+    "template": "Template",
+    "invoice_template": "Invoice Template",
+    "template_selector": "Template Selector",
+    "template_selector_description": "Choose the invoice template your client will see.",
+    "subtotal": "Subtotal",
+    "taxTotal": "Tax Total",
+    "tax_total": "Tax Total",
+    "grandTotal": "Grand Total",
+    "grand_total": "Grand Total",
+    "preview": "Preview",
+    "preview_description": "Review the invoice facts before saving it.",
+    "invoice_document": "Invoice",
+    "invoice_preview_page_title": "Invoice Preview",
+    "invoice_preview_page_subtitle": "Open the full invoice page, print it to PDF, or share it with your customer.",
+    "shared_invoice_title": "Shared Invoice",
+    "shared_invoice_subtitle": "This invoice page is ready to download, print, or review.",
+    "back_to_invoices": "Back to Invoices",
+    "open_customer_view": "Open Customer View",
+    "copy_link": "Copy Link",
+    "link_copied": "Invoice link copied successfully.",
+    "link_copy_unavailable": "Copy link is not available in this browser.",
+    "share": "Share",
+    "share_invoice_text": "Review invoice {invoiceNumber}",
+    "download_pdf": "Download PDF",
+    "pdf_share_unavailable": "Unable to share the invoice PDF on this device.",
+    "pdf_download_unavailable": "Unable to generate the invoice PDF right now.",
+    "createInvoice": "Create Invoice",
+    "create_from_preview_hint": "Use preview before final creation.",
+    "empty_title": "No invoices yet",
+    "empty_description": "Create your first invoice to start tracking customers, totals, and payment status.",
+    "customer_invoice_information": "Customer & Invoice Information",
+    "customer_invoice_information_description": "Set the customer details, invoice number, date, and tax handling.",
+    "saved_item_mode": "Select from saved items or add custom lines.",
+    "manual_item_mode": "Add manual line items because no saved items are available yet.",
+    "add_item": "Add Item",
+    "item": "Item",
+    "saved_item": "Saved Item",
+    "custom_item": "Custom Entry",
+    "description": "Details",
+    "unit_type": "Unit Type",
+    "quantity": "Quantity",
+    "price": "Price",
+    "total": "Total",
+    "tax": "Tax",
+    "invoice_tax": "Invoice Tax",
+    "add_tax": "Add tax",
+    "remove_tax": "Remove tax",
+    "discount": "Discount",
+    "discount_type": "Discount Type",
+    "discount_value": "Discount Value",
+    "select_tax_type": "Select a tax type",
+    "select_taxes": "Select taxes",
+    "tax_not_applicable": "Tax is not applicable",
+    "item_tax_notice": "Taxes are being applied per item based on your company settings.",
+    "no_tax": "No tax",
+    "tax_not_selected": "Tax not selected",
+    "use_typed_item": "No saved item matched. The typed text will be used as the item name.",
+    "bill_to": "Bill To",
+    "payment_method": "Payment Method",
+    "summary": "Summary",
+    "totals": "Totals",
+    "totals_description": "Totals update automatically as items and taxes change.",
+    "company_placeholder": "Your Company",
+    "thank_you": "Thank You!",
+    "no_notes": "No notes added.",
+    "view": "View",
+    "clone": "Clone",
+    "manage_invoice": "View, edit, clone, or delete this invoice.",
+    "confirm_delete_message": "Are you sure you want to delete this invoice?",
+    "deleting": "Deleting...",
+    "saving": "Saving...",
+    "manual_entry_hint": "Manual item entry is enabled.",
+    "tax_type_options": {
+      "tax_free": "Tax Free",
+      "zero_tax": "Zero Tax",
+      "taxable": "Taxable"
+    },
+    "discount_types": {
+      "percentage": "Percentage",
+      "fixed": "Fixed"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "sent": "Sent",
+      "paid": "Paid",
+      "overdue": "Overdue"
+    },
+    "templates": {
+      "minimalist": {
+        "title": "Invoice Generator Default",
+        "description": "Simple spacing and clear hierarchy for modern invoices."
+      },
+      "corporate": {
+        "title": "Classic & Corporate",
+        "description": "A formal structure suited for established businesses."
+      },
+      "creative": {
+        "title": "Creative & Artistic",
+        "description": "A softer presentation with more personality."
+      },
+      "vintage": {
+        "title": "Vintage / Old-World",
+        "description": "Warm tones and classic contrast for boutique brands."
+      },
+      "modern": {
+        "title": "Modern & Tech-Focused",
+        "description": "A bold, dark-accented layout for digital-first teams."
+      }
+    },
+    "messages": {
+      "deleted": "Invoice deleted successfully."
+    },
+    "placeholders": {
+      "customer_name": "John Doe",
+      "customer_email": "john@example.com",
+      "item_search": "Search items or type a new name",
+      "item_name": "Website design",
+      "unit_type": "hour",
+      "notes": "Additional notes for your client..."
+    }
+  },
+  "items": {
+    "title": "Items",
+    "subtitle": "Create reusable catalog items with saved prices, units, and optional tax defaults.",
+    "newItem": "New Item",
+    "add_item": "Add Item",
+    "create_first_item": "Create First Item",
+    "edit_item": "Edit Item",
+    "delete_item": "Delete Item",
+    "save_item": "Save Item",
+    "saving": "Saving...",
+    "deleting": "Deleting...",
+    "name": "Name",
+    "price": "Price",
+    "unitType": "Unit Type",
+    "unit_type": "Unit Type",
+    "description": "Description",
+    "taxType": "Tax Type",
+    "tax_type": "Tax Type",
+    "no_tax_type": "No tax type",
+    "no_description": "No description provided.",
+    "empty_title": "No items yet",
+    "empty_description": "Save reusable items here so invoice creation stays fast and consistent.",
+    "confirm_delete_message": "Are you sure you want to delete this item?",
+    "placeholders": {
+      "name": "Website design",
+      "description": "Optional notes about this item"
+    },
+    "modal_descriptions": {
+      "create": "Add a reusable item with a default price, unit, and optional tax type.",
+      "edit": "Update the saved item details used across future invoices."
+    },
+    "messages": {
+      "created": "Item created successfully.",
+      "updated": "Item updated successfully.",
+      "deleted": "Item deleted successfully."
+    },
+    "validation": {
+      "name_required": "Item name is required.",
+      "price_required": "Price is required.",
+      "price_invalid": "Price must be zero or greater.",
+      "unit_type_required": "Unit type is required."
+    },
+    "units": {
+      "piece": "Piece",
+      "hour": "Hour",
+      "kg": "Kg",
+      "day": "Day",
+      "service": "Service"
+    }
+  },
+  "taxTypes": {
+    "title": "Tax Types",
+    "newTaxType": "New Tax Type",
+    "percentage": "Percentage"
+  }
+}

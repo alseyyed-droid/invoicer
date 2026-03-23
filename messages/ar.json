@@ -1,0 +1,226 @@
+{
+  "common": {
+    "dashboard": "لوحة التحكم",
+    "invoices": "الفواتير",
+    "items": "الأصناف",
+    "settings": "الإعدادات",
+    "create": "إنشاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "actions": "الإجراءات",
+    "search": "بحث...",
+    "logout": "تسجيل الخروج",
+    "profile": "الملف الشخصي"
+  },
+  "dashboard": {
+    "recentInvoices": "أحدث الفواتير",
+    "pendingInvoices": "الفواتير المعلقة",
+    "overdueInvoices": "الفواتير المتأخرة",
+    "totalAmount": "إجمالي المبلغ"
+  },
+  "invoices": {
+    "title": "الفواتير",
+    "subtitle": "أنشئ الفواتير وعاينها وعدّلها وأدرها من نفس المساحة.",
+    "newInvoice": "فاتورة جديدة",
+    "create_invoice": "إنشاء فاتورة",
+    "create_invoice_title": "إنشاء فاتورة",
+    "create_invoice_subtitle": "أنشئ فواتير احترافية باستخدام الأصناف المحفوظة والضرائب والإجماليات المباشرة.",
+    "edit_invoice_title": "تعديل الفاتورة",
+    "edit_invoice_subtitle": "حدّث بيانات الفاتورة وبنودها وضرائبها والقالب المستخدم.",
+    "invoiceNumber": "رقم الفاتورة",
+    "invoice_number": "رقم الفاتورة",
+    "customer": "العميل",
+    "date": "التاريخ",
+    "amount": "المبلغ",
+    "status": "الحالة",
+    "customerName": "اسم العميل",
+    "customerEmail": "بريد العميل",
+    "customer_name": "اسم العميل",
+    "customer_email": "بريد العميل",
+    "invoiceDate": "تاريخ الفاتورة",
+    "invoice_date": "تاريخ الفاتورة",
+    "taxType": "نوع الضريبة",
+    "tax_type": "نوع الضريبة",
+    "items": "الأصناف",
+    "invoice_items": "بنود الفاتورة",
+    "notes": "ملاحظات",
+    "notes_description": "أضف ملاحظات منسقة تظهر في أسفل الفاتورة.",
+    "template": "القالب",
+    "invoice_template": "قالب الفاتورة",
+    "template_selector": "اختيار القالب",
+    "template_selector_description": "اختر القالب الذي سيشاهده العميل في الفاتورة.",
+    "subtotal": "المجموع الفرعي",
+    "taxTotal": "إجمالي الضريبة",
+    "tax_total": "إجمالي الضريبة",
+    "grandTotal": "المجموع الكلي",
+    "grand_total": "المجموع الكلي",
+    "preview": "معاينة",
+    "preview_description": "راجع تفاصيل الفاتورة قبل حفظها.",
+    "invoice_document": "فاتورة",
+    "invoice_preview_page_title": "معاينة الفاتورة",
+    "invoice_preview_page_subtitle": "افتح صفحة الفاتورة الكاملة أو اطبعها PDF أو شاركها مع عميلك.",
+    "shared_invoice_title": "فاتورة مشاركة",
+    "shared_invoice_subtitle": "هذه الفاتورة جاهزة للتنزيل أو الطباعة أو المراجعة.",
+    "back_to_invoices": "العودة إلى الفواتير",
+    "open_customer_view": "فتح عرض العميل",
+    "copy_link": "نسخ الرابط",
+    "link_copied": "تم نسخ رابط الفاتورة بنجاح.",
+    "link_copy_unavailable": "نسخ الرابط غير متاح في هذا المتصفح.",
+    "share": "مشاركة",
+    "share_invoice_text": "راجع الفاتورة {invoiceNumber}",
+    "download_pdf": "تنزيل PDF",
+    "pdf_share_unavailable": "تعذر مشاركة ملف PDF الخاص بالفاتورة على هذا الجهاز.",
+    "pdf_download_unavailable": "تعذر إنشاء ملف PDF الخاص بالفاتورة الآن.",
+    "createInvoice": "إنشاء فاتورة",
+    "create_from_preview_hint": "استخدم المعاينة قبل إنشاء الفاتورة نهائيًا.",
+    "empty_title": "لا توجد فواتير بعد",
+    "empty_description": "أنشئ أول فاتورة لبدء تتبع العملاء والإجماليات وحالة الدفع.",
+    "customer_invoice_information": "بيانات العميل والفاتورة",
+    "customer_invoice_information_description": "حدد بيانات العميل ورقم الفاتورة وتاريخها وطريقة تطبيق الضريبة.",
+    "saved_item_mode": "اختر من الأصناف المحفوظة أو أضف بنودًا مخصصة.",
+    "manual_item_mode": "أضف بنودًا يدويًا لأنه لا توجد أصناف محفوظة بعد.",
+    "add_item": "إضافة بند",
+    "item": "البند",
+    "saved_item": "الصنف المحفوظ",
+    "custom_item": "إدخال مخصص",
+    "description": "التفاصيل",
+    "unit_type": "نوع الوحدة",
+    "quantity": "الكمية",
+    "price": "السعر",
+    "total": "الإجمالي",
+    "tax": "الضريبة",
+    "invoice_tax": "ضريبة الفاتورة",
+    "add_tax": "إضافة ضريبة",
+    "remove_tax": "إزالة الضريبة",
+    "discount": "الخصم",
+    "discount_type": "نوع الخصم",
+    "discount_value": "قيمة الخصم",
+    "select_tax_type": "اختر نوع الضريبة",
+    "select_taxes": "اختر الضرائب",
+    "tax_not_applicable": "الضريبة غير مطبقة",
+    "item_tax_notice": "يتم تطبيق الضرائب على مستوى كل بند حسب إعدادات الشركة.",
+    "no_tax": "بدون ضريبة",
+    "tax_not_selected": "لم يتم اختيار ضريبة",
+    "use_typed_item": "لم يتم العثور على صنف محفوظ مطابق. سيتم استخدام النص المكتوب كاسم للبند.",
+    "bill_to": "إصدار إلى",
+    "payment_method": "طريقة الدفع",
+    "summary": "الملخص",
+    "totals": "الإجماليات",
+    "totals_description": "تتحدث الإجماليات تلقائيًا عند تغيير البنود أو الضرائب.",
+    "company_placeholder": "شركتك",
+    "thank_you": "شكراً لك!",
+    "no_notes": "لا توجد ملاحظات.",
+    "view": "عرض",
+    "clone": "\u0627\u0633\u062a\u0646\u0633\u0627\u062e",
+    "manage_invoice": "\u0627\u0639\u0631\u0636 \u0647\u0630\u0647 \u0627\u0644\u0641\u0627\u062a\u0648\u0631\u0629 \u0623\u0648 \u0639\u062f\u0651\u0644\u0647\u0627 \u0623\u0648 \u0627\u0633\u062a\u0646\u0633\u062e\u0647\u0627 \u0623\u0648 \u0627\u062d\u0630\u0641\u0647\u0627.",
+    "confirm_delete_message": "هل أنت متأكد أنك تريد حذف هذه الفاتورة؟",
+    "deleting": "جارٍ الحذف...",
+    "saving": "جارٍ الحفظ...",
+    "manual_entry_hint": "الإدخال اليدوي للبنود مفعل.",
+    "tax_type_options": {
+      "tax_free": "معفاة من الضريبة",
+      "zero_tax": "ضريبة صفرية",
+      "taxable": "خاضعة للضريبة"
+    },
+    "discount_types": {
+      "percentage": "نسبة مئوية",
+      "fixed": "قيمة ثابتة"
+    },
+    "statuses": {
+      "draft": "مسودة",
+      "sent": "مرسلة",
+      "paid": "مدفوعة",
+      "overdue": "متأخرة"
+    },
+    "templates": {
+      "minimalist": {
+        "title": "Invoice Generator Default",
+        "description": "تصميم هادئ وواضح لفواتير عصرية."
+      },
+      "corporate": {
+        "title": "كلاسيكي واحترافي",
+        "description": "هيكل رسمي يناسب الشركات والأعمال المنظمة."
+      },
+      "creative": {
+        "title": "إبداعي وفني",
+        "description": "عرض أكثر حيوية وشخصية للعلامات المرنة."
+      },
+      "vintage": {
+        "title": "قديم الطابع",
+        "description": "ألوان دافئة وتباين كلاسيكي للعلامات البوتيكية."
+      },
+      "modern": {
+        "title": "حديث وتقني",
+        "description": "تخطيط جريء بلمسة تقنية للفرق الرقمية."
+      }
+    },
+    "messages": {
+      "deleted": "تم حذف الفاتورة بنجاح."
+    },
+    "placeholders": {
+      "customer_name": "محمد أحمد",
+      "customer_email": "client@example.com",
+      "item_search": "ابحث في الأصناف أو اكتب اسمًا جديدًا",
+      "item_name": "تصميم موقع",
+      "unit_type": "ساعة",
+      "notes": "أضف ملاحظات إضافية للعميل..."
+    }
+  },
+  "items": {
+    "title": "الأصناف",
+    "subtitle": "أنشئ أصنافًا قابلة لإعادة الاستخدام مع أسعار ووحدات وإعدادات ضريبة اختيارية.",
+    "newItem": "صنف جديد",
+    "add_item": "إضافة صنف",
+    "create_first_item": "إنشاء أول صنف",
+    "edit_item": "تعديل الصنف",
+    "delete_item": "حذف الصنف",
+    "save_item": "حفظ الصنف",
+    "saving": "جارٍ الحفظ...",
+    "deleting": "جارٍ الحذف...",
+    "name": "الاسم",
+    "price": "السعر",
+    "unitType": "الوحدة",
+    "unit_type": "نوع الوحدة",
+    "description": "الوصف",
+    "taxType": "نوع الضريبة",
+    "tax_type": "نوع الضريبة",
+    "no_tax_type": "بدون نوع ضريبة",
+    "no_description": "لا يوجد وصف.",
+    "empty_title": "لا توجد أصناف بعد",
+    "empty_description": "احفظ أصنافك القابلة لإعادة الاستخدام هنا لتسريع إنشاء الفواتير وتوحيدها.",
+    "confirm_delete_message": "هل أنت متأكد من رغبتك في حذف هذا الصنف؟",
+    "placeholders": {
+      "name": "تصميم موقع إلكتروني",
+      "description": "ملاحظات اختيارية حول هذا الصنف"
+    },
+    "modal_descriptions": {
+      "create": "أضف صنفًا قابلًا لإعادة الاستخدام مع سعر افتراضي ووحدة ونوع ضريبة اختياري.",
+      "edit": "حدّث بيانات الصنف المحفوظ لاستخدامه في الفواتير القادمة."
+    },
+    "messages": {
+      "created": "تم إنشاء الصنف بنجاح.",
+      "updated": "تم تحديث الصنف بنجاح.",
+      "deleted": "تم حذف الصنف بنجاح."
+    },
+    "validation": {
+      "name_required": "اسم الصنف مطلوب.",
+      "price_required": "السعر مطلوب.",
+      "price_invalid": "يجب أن يكون السعر صفرًا أو أكبر.",
+      "unit_type_required": "نوع الوحدة مطلوب."
+    },
+    "units": {
+      "piece": "قطعة",
+      "hour": "ساعة",
+      "kg": "كجم",
+      "day": "يوم",
+      "service": "خدمة"
+    }
+  },
+  "taxTypes": {
+    "title": "أنواع الضرائب",
+    "newTaxType": "نوع ضريبة جديد",
+    "percentage": "النسبة المئوية"
+  }
+}

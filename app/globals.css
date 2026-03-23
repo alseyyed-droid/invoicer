@@ -1,0 +1,409 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #10b981;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.light {
+  --bg: #f7f8fb;
+  --surface: #ffffff;
+  --border: #d8dee8;
+  --text: #1e293b;
+  color-scheme: light;
+}
+
+html.dark {
+  --bg: #020617;
+  --surface: #0f172a;
+  --border: #334155;
+  --text: #e2e8f0;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  @apply overflow-x-hidden antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text);
+}
+
+p {
+  color: color-mix(in srgb, var(--text) 68%, transparent);
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 24;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.shell-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  @apply rounded-2xl shadow-[0_1px_2px_rgba(15,23,42,0.04)];
+}
+
+.surface-panel {
+  background: color-mix(in srgb, var(--surface) 45%, var(--bg));
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.surface-inset {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.text-muted {
+  color: color-mix(in srgb, var(--text) 68%, transparent);
+}
+
+.text-soft {
+  color: color-mix(in srgb, var(--text) 45%, transparent);
+}
+
+.skeleton-strong {
+  background: color-mix(in srgb, var(--text) 22%, transparent);
+}
+
+.skeleton {
+  background: color-mix(in srgb, var(--text) 14%, transparent);
+}
+
+.tone-emerald {
+  @apply bg-emerald-50 text-emerald-500 dark:bg-emerald-500/10 dark:text-emerald-400;
+}
+
+.status-paid {
+  @apply bg-[#e8f7ef] text-[#3ca56d] dark:bg-emerald-500/10 dark:text-emerald-400;
+}
+
+.status-pending {
+  @apply bg-[#fff4da] text-[#d78a18] dark:bg-amber-500/10 dark:text-amber-400;
+}
+
+.status-overdue {
+  @apply bg-[#ffe4ea] text-[#e55074] dark:bg-rose-500/10 dark:text-rose-300;
+}
+
+.alert-success {
+  @apply rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300;
+}
+
+.alert-error {
+  @apply rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300;
+}
+
+.accent-active {
+  @apply bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400;
+}
+
+.accent-active-bordered {
+  @apply border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.btn-primary {
+  @apply bg-emerald-500 text-white shadow-sm hover:bg-emerald-600;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: color-mix(in srgb, var(--text) 75%, transparent);
+  @apply shadow-[0_1px_1px_rgba(15,23,42,0.03)];
+}
+
+.btn-secondary:hover {
+  background: var(--bg);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+}
+
+.btn-ghost:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  @apply block w-full rounded-xl py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-500;
+}
+
+.select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  @apply block w-full rounded-xl py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-500;
+}
+
+.textarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  @apply block w-full rounded-xl py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-500;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: color-mix(in srgb, var(--text) 40%, transparent);
+}
+
+[contenteditable][data-placeholder]:empty::before {
+  color: color-mix(in srgb, var(--text) 40%, transparent);
+  content: attr(data-placeholder);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+  box-shadow: 0 0 0 1000px var(--bg) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.label {
+  color: color-mix(in srgb, var(--text) 68%, transparent);
+  @apply mb-2 block text-sm font-medium;
+}
+
+.app-shell {
+  background: var(--bg);
+  @apply flex min-h-screen flex-col;
+}
+
+.topbar {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-bottom: 1px solid var(--border);
+  @apply sticky top-0 z-50 w-full backdrop-blur-md;
+}
+
+.topbar-inner {
+  @apply mx-auto flex h-[54px] w-full items-center justify-between px-6;
+}
+
+.brand-mark {
+  @apply flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500 text-white;
+}
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  @apply hidden w-[214px] shrink-0 flex-col md:flex;
+}
+
+.sidebar-inner {
+  @apply px-4 py-5;
+}
+
+.sidebar-link {
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-semibold transition-colors;
+}
+
+.sidebar-link:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.sidebar-link .material-symbols-outlined {
+  @apply text-[18px];
+}
+
+.sidebar-link-active {
+  @apply bg-[#e8f7ef] text-emerald-500 dark:bg-emerald-500/10 dark:text-emerald-400;
+}
+
+.mobile-tabs {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  @apply flex gap-2 overflow-x-auto px-4 py-3 md:hidden;
+}
+
+.mobile-tab {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+  @apply rounded-full px-4 py-2 text-sm font-medium transition-colors;
+}
+
+.mobile-tab:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.mobile-tab-active {
+  @apply border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  @apply rounded-2xl p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)];
+}
+
+.table-shell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  @apply overflow-hidden rounded-2xl shadow-[0_1px_2px_rgba(15,23,42,0.04)];
+}
+
+.status-chip {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+}
+
+.page-title {
+  color: var(--text);
+  @apply text-[28px] font-bold tracking-tight;
+}
+
+.page-subtitle {
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+  @apply text-sm;
+}
+
+.hide-scrollbar::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar,
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+[dir='rtl'] .material-symbols-outlined {
+  direction: ltr;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .topbar,
+  .sidebar,
+  .mobile-tabs,
+  .print-hidden {
+    display: none !important;
+  }
+
+  .app-shell,
+  .app-shell > div,
+  .app-shell main {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .app-shell main > div {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .invoice-view-shell {
+    padding: 0 !important;
+  }
+
+  .invoice-document,
+  .invoice-document * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .invoice-document {
+    width: 210mm !important;
+    max-width: none !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .invoice-preview-modal {
+    position: static !important;
+    inset: auto !important;
+    z-index: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .invoice-preview-dialog,
+  .invoice-preview-shell {
+    display: block !important;
+    max-width: none !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .invoice-preview-body {
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+}

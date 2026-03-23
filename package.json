@@ -1,0 +1,46 @@
+{
+  "name": "invoice-generator",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "postinstall": "prisma generate && playwright install chromium",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "node prisma/seed.mjs"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "latest",
+    "@hookform/resolvers": "latest",
+    "@prisma/adapter-mariadb": "latest",
+    "@prisma/client": "latest",
+    "bcryptjs": "latest",
+    "clsx": "latest",
+    "dotenv": "latest",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "lucide-react": "latest",
+    "motion": "latest",
+    "next": "latest",
+    "next-auth": "latest",
+    "next-intl": "latest",
+    "playwright": "^1.58.2",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-hook-form": "latest",
+    "tailwind-merge": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "prisma": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest"
+  }
+}
