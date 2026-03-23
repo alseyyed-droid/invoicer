@@ -1,9 +1,9 @@
 export const settingsSections = [
-  { id: 'profile', label: 'Profile' },
-  { id: 'company', label: 'Company' },
-  { id: 'preferences', label: 'Preferences' },
-  { id: 'customization', label: 'Customization' },
-  { id: 'tax-types', label: 'Tax Types' }
+  { id: 'profile', labelKey: 'sections.profile' },
+  { id: 'company', labelKey: 'sections.company' },
+  { id: 'preferences', labelKey: 'sections.preferences' },
+  { id: 'customization', labelKey: 'sections.customization' },
+  { id: 'tax-types', labelKey: 'sections.tax_types' }
 ] as const;
 
 export type SettingsSectionId = (typeof settingsSections)[number]['id'];

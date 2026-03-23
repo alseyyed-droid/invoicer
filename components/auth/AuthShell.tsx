@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 export default function AuthShell({
@@ -14,6 +15,7 @@ export default function AuthShell({
   footer?: ReactNode;
   children: ReactNode;
 }) {
+  const t = useTranslations('auth');
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--bg)] px-4 py-12">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-xl lg:grid-cols-[1.1fr_0.9fr]">
@@ -24,25 +26,25 @@ export default function AuthShell({
             </div>
             <p className="mb-3 text-sm uppercase tracking-[0.3em] text-emerald-300">InvoiceGen</p>
             <h1 className="max-w-sm text-4xl font-bold leading-tight">
-              Clean billing workflows for freelancers and modern teams.
+              {t('shell.hero_title')}
             </h1>
             <p className="mt-4 max-w-md text-sm leading-6 text-slate-300">
-              Manage invoices, line items, taxes, and company settings from one focused workspace.
+              {t('shell.hero_description')}
             </p>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
               <p className="text-2xl font-bold">42</p>
-              <p className="text-xs text-slate-300">Invoices issued</p>
+              <p className="text-xs text-slate-300">{t('shell.stats.invoices_issued')}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
               <p className="text-2xl font-bold">$4.8k</p>
-              <p className="text-xs text-slate-300">Pending revenue</p>
+              <p className="text-xs text-slate-300">{t('shell.stats.pending_revenue')}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
               <p className="text-2xl font-bold">2</p>
-              <p className="text-xs text-slate-300">Overdue alerts</p>
+              <p className="text-xs text-slate-300">{t('shell.stats.overdue_alerts')}</p>
             </div>
           </div>
         </div>
@@ -60,13 +62,13 @@ export default function AuthShell({
             {children}
 
             <div className="text-muted mt-6 flex items-center justify-between text-sm">
-              <span>Demo user is pre-seeded locally.</span>
+              <span>{t('shell.demo_user_notice')}</span>
               {footer ?? (
                 <Link
                   href={`/${locale}/login`}
                   className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700"
                 >
-                  Back to login
+                  {t('back_to_login')}
                 </Link>
               )}
             </div>

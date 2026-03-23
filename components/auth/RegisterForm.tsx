@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -16,6 +17,8 @@ type Errors = {
 };
 
 export default function RegisterForm({ locale }: { locale: string }) {
+  const commonT = useTranslations('common');
+  const t = useTranslations('auth');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [form, setForm] = useState({
@@ -36,16 +39,16 @@ export default function RegisterForm({ locale }: { locale: string }) {
     const nextErrors: Errors = {};
 
     if (!form.name.trim()) {
-      nextErrors.name = 'Name is required.';
+      nextErrors.name = t('validation.name_required');
     }
     if (!form.email.trim()) {
-      nextErrors.email = 'Email is required.';
+      nextErrors.email = t('validation.email_required');
     }
     if (!form.password.trim()) {
-      nextErrors.password = 'Password is required.';
+      nextErrors.password = t('validation.password_required');
     }
     if (form.password !== form.confirmPassword) {
-      nextErrors.confirmPassword = 'Passwords do not match.';
+      nextErrors.confirmPassword = t('validation.passwords_mismatch');
     }
 
     setErrors(nextErrors);
@@ -85,21 +88,21 @@ export default function RegisterForm({ locale }: { locale: string }) {
   return (
     <AuthShell
       locale={locale}
-      title="Create your account"
-      description="Start managing invoices, items, and settings from one workspace."
+      title={t('register.title')}
+      description={t('register.description')}
       footer={
         <Link href={`/${locale}/login`} className="font-semibold text-emerald-600 hover:text-emerald-700">
-          Back to login
+          {t('back_to_login')}
         </Link>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="label">Name</label>
+          <label className="label">{commonT('name')}</label>
           <input
             type="text"
             className="input px-4"
-            placeholder="Your full name"
+            placeholder={t('placeholders.full_name')}
             value={form.name}
             onChange={(event) => handleChange('name', event.target.value)}
           />
@@ -107,11 +110,11 @@ export default function RegisterForm({ locale }: { locale: string }) {
         </div>
 
         <div>
-          <label className="label">Email</label>
+          <label className="label">{commonT('email')}</label>
           <input
             type="email"
             className="input px-4"
-            placeholder="name@company.com"
+            placeholder={t('placeholders.email')}
             value={form.email}
             onChange={(event) => handleChange('email', event.target.value)}
           />
@@ -119,11 +122,11 @@ export default function RegisterForm({ locale }: { locale: string }) {
         </div>
 
         <div>
-          <label className="label">Password</label>
+          <label className="label">{commonT('password')}</label>
           <input
             type="password"
             className="input px-4"
-            placeholder="Create a password"
+            placeholder={t('placeholders.create_password')}
             value={form.password}
             onChange={(event) => handleChange('password', event.target.value)}
           />
@@ -131,11 +134,11 @@ export default function RegisterForm({ locale }: { locale: string }) {
         </div>
 
         <div>
-          <label className="label">Confirm Password</label>
+          <label className="label">{commonT('confirm_password')}</label>
           <input
             type="password"
             className="input px-4"
-            placeholder="Confirm your password"
+            placeholder={t('placeholders.confirm_password')}
             value={form.confirmPassword}
             onChange={(event) => handleChange('confirmPassword', event.target.value)}
           />
@@ -150,13 +153,13 @@ export default function RegisterForm({ locale }: { locale: string }) {
 
         <button type="submit" className="btn btn-primary w-full py-3" disabled={isPending}>
           <span className="material-symbols-outlined">person_add</span>
-          {isPending ? 'Creating Account...' : 'Register'}
+          {isPending ? t('register.submitting') : t('register.submit')}
         </button>
 
         <p className="text-muted text-center text-sm">
-          Already have an account?{' '}
+          {t('register.already_have_account')}{' '}
           <Link href={`/${locale}/login`} className="font-semibold text-emerald-600 hover:text-emerald-700">
-            Login
+            {t('login.submit')}
           </Link>
         </p>
       </form>

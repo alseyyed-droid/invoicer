@@ -1,13 +1,8 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import DashboardStats from '@/components/dashboard/DashboardStats';
 import InvoiceTable from '@/components/invoices/InvoiceTable';
 import { requireAuth } from '@/auth';
-
-const quickActions = [
-  { icon: 'post_add', label: 'Create Invoice', href: '/invoices/new' },
-  { icon: 'inventory_2', label: 'Add Item', href: '/items' },
-  { icon: 'bar_chart', label: 'View Reports', href: '/settings' }
-];
 
 export default async function DashboardPage({
   params
@@ -16,6 +11,12 @@ export default async function DashboardPage({
 }) {
   const { locale } = await Promise.resolve(params);
   const session = await requireAuth(locale);
+  const t = await getTranslations({ locale, namespace: 'dashboard' });
+  const quickActions = [
+    { icon: 'post_add', label: t('quick_actions.create_invoice'), href: '/invoices/new' },
+    { icon: 'inventory_2', label: t('quick_actions.add_item'), href: '/items' },
+    { icon: 'bar_chart', label: t('quick_actions.view_reports'), href: '/settings' }
+  ];
 
   return (
     <div>
@@ -32,14 +33,14 @@ export default async function DashboardPage({
         ))}
       </div>
 
-      <DashboardStats userId={session.user.id} />
+      <DashboardStats userId={session.user.id} locale={locale} />
 
       <InvoiceTable userId={session.user.id} locale={locale} />
 
       <footer className="mt-10 border-t border-[var(--border)] py-6">
         <div className="text-center">
           <p className="text-soft text-sm">
-            {'\u00A9'} 2026 InvoiceGen. Designed for freelancers and small businesses.
+            {t('footer_note')}
           </p>
         </div>
       </footer>

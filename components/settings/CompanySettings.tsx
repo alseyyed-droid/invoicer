@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, type ChangeEvent } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { saveCompanySettingsAction } from '@/lib/actions/settings';
 
@@ -22,6 +23,8 @@ export default function CompanySettings({
   };
   isOnboarding?: boolean;
 }) {
+  const commonT = useTranslations('common');
+  const t = useTranslations('settings');
   const router = useRouter();
   const [form, setForm] = useState({
     companyName: initialValues.companyName ?? '',
@@ -94,33 +97,33 @@ export default function CompanySettings({
   return (
     <section className="shell-card p-6">
       <div className="mb-6">
-        <h2 className="text-xl font-bold">Company</h2>
-        <p className="mt-1 text-sm">Configure the company details that appear on invoices.</p>
+        <h2 className="text-xl font-bold">{t('company.title')}</h2>
+        <p className="mt-1 text-sm">{t('company.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <Field label="Company Name" value={form.companyName} onChange={(value) => updateField('companyName', value)} />
-        <Field label="Country" value={form.country} onChange={(value) => updateField('country', value)} />
-        <Field label="City" value={form.city} onChange={(value) => updateField('city', value)} />
+        <Field label={t('company.company_name')} value={form.companyName} onChange={(value) => updateField('companyName', value)} />
+        <Field label={t('company.country')} value={form.country} onChange={(value) => updateField('country', value)} />
+        <Field label={t('company.city')} value={form.city} onChange={(value) => updateField('city', value)} />
         <Field
-          label="Company Email"
+          label={t('company.company_email')}
           type="email"
           value={form.companyEmail}
           onChange={(value) => updateField('companyEmail', value)}
         />
-        <Field label="Address" value={form.address} onChange={(value) => updateField('address', value)} />
-        <Field label="Postal Code" value={form.postalCode} onChange={(value) => updateField('postalCode', value)} />
+        <Field label={t('company.address')} value={form.address} onChange={(value) => updateField('address', value)} />
+        <Field label={t('company.postal_code')} value={form.postalCode} onChange={(value) => updateField('postalCode', value)} />
         <div className="md:col-span-2">
-          <label className="label">Company Logo Upload</label>
+          <label className="label">{t('company.company_logo_upload')}</label>
           <input type="file" accept="image/*" className="input px-4 pt-2" onChange={handleFileChange} />
           {form.companyLogo && (
             <div className="surface-inset mt-3 flex items-center justify-between rounded-2xl px-4 py-3">
               <div className="flex items-center gap-3">
-                <img src={form.companyLogo} alt="Company logo preview" className="h-12 w-12 rounded-xl object-cover" />
-                <p className="text-sm font-medium text-[color:var(--text)]">Logo ready to save</p>
+                <img src={form.companyLogo} alt={t('company.company_logo_preview_alt')} className="h-12 w-12 rounded-xl object-cover" />
+                <p className="text-sm font-medium text-[color:var(--text)]">{t('company.logo_ready')}</p>
               </div>
               <button type="button" className="btn btn-ghost" onClick={() => updateField('companyLogo', '')}>
-                Remove
+                {commonT('remove')}
               </button>
             </div>
           )}
@@ -136,11 +139,11 @@ export default function CompanySettings({
             className="mt-1 h-4 w-4 rounded border-[var(--border)] bg-[var(--surface)] text-emerald-500 focus:ring-emerald-500"
           />
           <div>
-            <p className="font-semibold text-[color:var(--text)]">Tax per item</p>
+            <p className="font-semibold text-[color:var(--text)]">{t('company.tax_per_item')}</p>
             <p className="text-muted text-sm">
               {form.taxPerItem
-                ? 'Taxes are applied to individual invoice items.'
-                : 'Taxes are applied to the invoice total.'}
+                ? t('company.tax_per_item_enabled')
+                : t('company.tax_per_item_disabled')}
             </p>
           </div>
         </label>
@@ -152,7 +155,7 @@ export default function CompanySettings({
       <div className="mt-6 flex justify-end">
         <button type="button" className="btn btn-primary" onClick={handleSave} disabled={isSaving}>
           <span className="material-symbols-outlined">save</span>
-          {isSaving ? 'Saving...' : isOnboarding ? 'Save and Continue' : 'Save Company Settings'}
+          {isSaving ? t('company.saving') : isOnboarding ? t('company.save_and_continue') : t('company.save')}
         </button>
       </div>
     </section>

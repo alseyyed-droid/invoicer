@@ -159,7 +159,7 @@ export type InvoiceRecord = {
 };
 
 export function getIntlLocale(locale: string) {
-  return locale === 'ar' ? 'ar-JO' : 'en-US';
+  return locale === 'ar' ? 'ar-JO-u-nu-latn' : 'en-US-u-nu-latn';
 }
 
 export function getInvoiceTemplateId(templateId?: string | null): InvoiceTemplateId {

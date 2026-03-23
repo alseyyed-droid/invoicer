@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { requireAuth } from '@/auth';
 
 const mockTaxes = [
@@ -13,16 +13,14 @@ export default async function TaxTypesPage({
 }) {
   const { locale } = await Promise.resolve(params);
   await requireAuth(locale);
-  const t = useTranslations('taxTypes');
+  const t = await getTranslations({ locale, namespace: 'taxTypes' });
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="page-title">{t('title')}</h1>
-          <p className="page-subtitle mt-2">
-            Define the tax presets available when creating invoices and reusable items.
-          </p>
+          <p className="page-subtitle mt-2">{t('subtitle')}</p>
         </div>
         <button className="btn btn-primary">
           <span className="material-symbols-outlined">add</span>

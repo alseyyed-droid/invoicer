@@ -14,6 +14,10 @@ export const creativeTemplate: TemplateRenderer = {
 };
 
 export function renderCreativeTemplate(context: InvoiceRenderContext) {
+  const isArabic = context.intlLocale.startsWith('ar');
+  const accentGradient = isArabic
+    ? 'linear-gradient(270deg,#065f46 0%,#10b981 55%,#52e3a9 100%)'
+    : 'linear-gradient(90deg,#065f46 0%,#10b981 55%,#52e3a9 100%)';
   const paymentLines = [
     context.companyInfo.companyName,
     context.companyInfo.companyEmail,
@@ -80,9 +84,9 @@ export function renderCreativeTemplate(context: InvoiceRenderContext) {
 
       <section className="relative mt-10 overflow-hidden rounded-[14px] border border-emerald-100">
         <table className="w-full border-collapse text-left">
-          <thead className="bg-[linear-gradient(90deg,#065f46_0%,#10b981_55%,#52e3a9_100%)] text-white">
+          <thead className="text-white" style={{ background: accentGradient }}>
             <tr>
-              <th className="px-4 py-4 text-lg font-semibold">Description</th>
+              <th className="px-4 py-4 text-lg font-semibold">{context.t('description')}</th>
               <th className="px-4 py-4 text-center text-lg font-semibold">{context.t('quantity')}</th>
               <th className="px-4 py-4 text-center text-lg font-semibold">{context.t('price')}</th>
               <th className="px-4 py-4 text-right text-lg font-semibold">{context.t('total')}</th>
@@ -133,7 +137,7 @@ export function renderCreativeTemplate(context: InvoiceRenderContext) {
             label={context.t('discount')}
             value={`-${formatCurrency(context.invoice.discountAmount, context.currency, context.intlLocale)}`}
           />
-          <div className="mt-4 flex items-center justify-between gap-4 bg-[linear-gradient(90deg,#065f46_0%,#10b981_55%,#52e3a9_100%)] px-5 py-4 text-white">
+          <div className="mt-4 flex items-center justify-between gap-4 px-3 py-4 text-white" style={{ background: accentGradient }}>
             <span className="text-3xl font-bold tracking-[-0.03em]">{context.t('total')}:</span>
             <span className="text-3xl font-bold tracking-[-0.03em]">
               {formatCurrency(context.invoice.grandTotal, context.currency, context.intlLocale)}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
@@ -14,6 +15,7 @@ export default function UserAvatarDropdown({
   userName: string;
   userEmail?: string | null;
 }) {
+  const t = useTranslations('common');
   const router = useRouter();
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -88,20 +90,20 @@ export default function UserAvatarDropdown({
               className="text-muted flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-[var(--bg)]"
             >
               <span className="material-symbols-outlined">settings</span>
-              Settings
+              {t('settings')}
             </Link>
 
             <div className="surface-inset rounded-xl px-3 py-3">
               <label className="text-muted mb-2 block text-xs font-semibold uppercase tracking-[0.08em]">
-                Language
+                {t('language')}
               </label>
               <select
                 className="select px-4"
                 value={locale}
                 onChange={(event) => switchLanguage(event.target.value)}
               >
-                <option value="en">English</option>
-                <option value="ar">Arabic</option>
+                <option value="en">{t('english')}</option>
+                <option value="ar">{t('arabic')}</option>
               </select>
             </div>
 
@@ -113,7 +115,7 @@ export default function UserAvatarDropdown({
               <span className="material-symbols-outlined">
                 {theme === 'dark' ? 'light_mode' : 'dark_mode'}
               </span>
-              {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              {theme === 'dark' ? t('light_mode') : t('dark_mode')}
             </button>
 
             <button
@@ -122,7 +124,7 @@ export default function UserAvatarDropdown({
               className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-rose-600 hover:bg-rose-50"
             >
               <span className="material-symbols-outlined">logout</span>
-              Logout
+              {t('logout')}
             </button>
           </div>
         </div>

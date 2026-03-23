@@ -16,6 +16,7 @@ const icons = {
 
 export default function SubNav() {
   const t = useTranslations('common');
+  const settingsT = useTranslations('settings');
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
@@ -106,7 +107,7 @@ export default function SubNav() {
                         isActive && 'accent-active'
                       )}
                     >
-                      {section.label}
+                      {settingsT(section.labelKey)}
                     </Link>
                   );
                 })}
@@ -156,7 +157,7 @@ export default function SubNav() {
                     isActive && 'accent-active-bordered'
                   )}
                 >
-                  {section.label}
+                  {settingsT(section.labelKey)}
                 </Link>
               );
             })}

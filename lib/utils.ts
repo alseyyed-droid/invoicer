@@ -6,9 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number, currency: string = 'USD', locale: string = 'en-US') {
-  return new Intl.NumberFormat(locale, {
+  const currencyLocale = locale.startsWith('ar') ? 'en-US-u-nu-latn' : locale;
+
+  return new Intl.NumberFormat(currencyLocale, {
     style: 'currency',
     currency: currency,
+    numberingSystem: 'latn'
   }).format(amount);
 }
 
@@ -17,5 +20,6 @@ export function formatDate(date: Date | string, locale: string = 'en-US') {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    numberingSystem: 'latn'
   }).format(new Date(date));
 }

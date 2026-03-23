@@ -1,11 +1,14 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import AuthShell from '@/components/auth/AuthShell';
 import { requestPasswordResetAction } from '@/lib/actions/auth';
 
 export default function ForgotPasswordForm({ locale }: { locale: string }) {
+  const commonT = useTranslations('common');
+  const t = useTranslations('auth');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -31,21 +34,21 @@ export default function ForgotPasswordForm({ locale }: { locale: string }) {
   return (
     <AuthShell
       locale={locale}
-      title="Reset your password"
-      description="Enter your email address and we will prepare a password reset request."
+      title={t('forgot_password.title')}
+      description={t('forgot_password.description')}
       footer={
         <Link href={`/${locale}/login`} className="font-semibold text-emerald-600 hover:text-emerald-700">
-          Back to login
+          {t('back_to_login')}
         </Link>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="label">Email</label>
+          <label className="label">{commonT('email')}</label>
           <input
             type="email"
             className="input px-4"
-            placeholder="name@company.com"
+            placeholder={t('placeholders.email')}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
@@ -58,7 +61,7 @@ export default function ForgotPasswordForm({ locale }: { locale: string }) {
 
         <button type="submit" className="btn btn-primary w-full py-3" disabled={isPending}>
           <span className="material-symbols-outlined">lock_reset</span>
-          {isPending ? 'Submitting...' : 'Reset Password'}
+          {isPending ? t('forgot_password.submitting') : t('forgot_password.submit')}
         </button>
       </form>
     </AuthShell>

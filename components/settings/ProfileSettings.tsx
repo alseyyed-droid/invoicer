@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { changePasswordAction, saveProfileSettingsAction } from '@/lib/actions/settings';
 
@@ -16,6 +17,8 @@ export default function ProfileSettings({
   initialMobileNumber: string;
 }) {
   const router = useRouter();
+  const commonT = useTranslations('common');
+  const t = useTranslations('settings');
   const [form, setForm] = useState({
     name: initialName,
     email: initialEmail,
@@ -88,17 +91,17 @@ export default function ProfileSettings({
     <div className="space-y-6">
       <section className="shell-card p-6">
         <div className="mb-6">
-          <h2 className="text-xl font-bold">Profile</h2>
-          <p className="mt-1 text-sm">Update the core details used for your account.</p>
+          <h2 className="text-xl font-bold">{t('profile.title')}</h2>
+          <p className="mt-1 text-sm">{t('profile.subtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <div>
-            <label className="label">Name</label>
+            <label className="label">{commonT('name')}</label>
             <input className="input px-4" value={form.name} onChange={(e) => updateField('name', e.target.value)} />
           </div>
           <div>
-            <label className="label">Email</label>
+            <label className="label">{commonT('email')}</label>
             <input
               type="email"
               className="input px-4"
@@ -107,7 +110,7 @@ export default function ProfileSettings({
             />
           </div>
           <div>
-            <label className="label">Mobile Number</label>
+            <label className="label">{t('profile.mobile_number')}</label>
             <input
               className="input px-4"
               value={form.mobile}
@@ -122,20 +125,20 @@ export default function ProfileSettings({
         <div className="mt-6 flex justify-end">
           <button type="button" onClick={handleSave} className="btn btn-primary" disabled={isSavingProfile}>
             <span className="material-symbols-outlined">save</span>
-            {isSavingProfile ? 'Saving...' : 'Save Profile'}
+            {isSavingProfile ? t('profile.saving') : t('profile.save')}
           </button>
         </div>
       </section>
 
       <section className="shell-card p-6">
         <div className="mb-6">
-          <h2 className="text-xl font-bold">Change Password</h2>
-          <p className="mt-1 text-sm">Keep your account secure with a fresh password.</p>
+          <h2 className="text-xl font-bold">{t('password.title')}</h2>
+          <p className="mt-1 text-sm">{t('password.subtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           <div>
-            <label className="label">Current Password</label>
+            <label className="label">{t('password.current_password')}</label>
             <input
               type="password"
               className="input px-4"
@@ -144,7 +147,7 @@ export default function ProfileSettings({
             />
           </div>
           <div>
-            <label className="label">New Password</label>
+            <label className="label">{t('password.new_password')}</label>
             <input
               type="password"
               className="input px-4"
@@ -153,7 +156,7 @@ export default function ProfileSettings({
             />
           </div>
           <div>
-            <label className="label">Confirm Password</label>
+            <label className="label">{t('password.confirm_password')}</label>
             <input
               type="password"
               className="input px-4"
@@ -174,7 +177,7 @@ export default function ProfileSettings({
             disabled={isSavingPassword}
           >
             <span className="material-symbols-outlined">password</span>
-            {isSavingPassword ? 'Updating...' : 'Update Password'}
+            {isSavingPassword ? t('password.updating') : t('password.update')}
           </button>
         </div>
       </section>

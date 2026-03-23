@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 import { savePreferencesSettingsAction } from '@/lib/actions/settings';
 
 export default function PreferencesSettings({
@@ -18,6 +19,8 @@ export default function PreferencesSettings({
     timeFormat: string;
   };
 }) {
+  const commonT = useTranslations('common');
+  const t = useTranslations('settings');
   const router = useRouter();
   const pathname = usePathname();
   const [isSaving, startTransition] = useTransition();
@@ -66,22 +69,22 @@ export default function PreferencesSettings({
   return (
     <section className="shell-card p-6">
       <div className="mb-6">
-        <h2 className="text-xl font-bold">Preferences</h2>
-        <p className="mt-1 text-sm">Define how dates, language, and financial settings are displayed.</p>
+        <h2 className="text-xl font-bold">{t('preferences.title')}</h2>
+        <p className="mt-1 text-sm">{t('preferences.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <SelectField
-          label="Language"
+          label={t('preferences.language')}
           value={form.language}
           onChange={(value) => updateField('language', value)}
           options={[
-            { label: 'English', value: 'en' },
-            { label: 'Arabic', value: 'ar' }
+            { label: commonT('english'), value: 'en' },
+            { label: commonT('arabic'), value: 'ar' }
           ]}
         />
         <SelectField
-          label="Currency"
+          label={t('preferences.currency')}
           value={form.currency}
           onChange={(value) => updateField('currency', value)}
           options={[
@@ -91,7 +94,7 @@ export default function PreferencesSettings({
           ]}
         />
         <SelectField
-          label="Date Format"
+          label={t('preferences.date_format')}
           value={form.dateFormat}
           onChange={(value) => updateField('dateFormat', value)}
           options={[
@@ -101,7 +104,7 @@ export default function PreferencesSettings({
           ]}
         />
         <SelectField
-          label="Time Zone"
+          label={t('preferences.time_zone')}
           value={form.timeZone}
           onChange={(value) => updateField('timeZone', value)}
           options={[
@@ -111,23 +114,23 @@ export default function PreferencesSettings({
           ]}
         />
         <SelectField
-          label="Fiscal Year"
+          label={t('preferences.fiscal_year')}
           value={form.fiscalYear}
           onChange={(value) => updateField('fiscalYear', value)}
           options={[
-            { label: 'January - December', value: 'January - December' },
-            { label: 'April - March', value: 'April - March' },
-            { label: 'July - June', value: 'July - June' }
+            { label: t('preferences.options.fiscal_years.january_december'), value: 'January - December' },
+            { label: t('preferences.options.fiscal_years.april_march'), value: 'April - March' },
+            { label: t('preferences.options.fiscal_years.july_june'), value: 'July - June' }
           ]}
         />
       </div>
 
       <div className="mt-6">
-        <label className="label">Time Format</label>
+        <label className="label">{t('preferences.time_format')}</label>
         <div className="flex gap-3">
           {[
-            { label: '24-hour', value: '24h' },
-            { label: '12-hour (AM/PM)', value: '12h' }
+            { label: t('preferences.options.time_formats.24h'), value: '24h' },
+            { label: t('preferences.options.time_formats.12h'), value: '12h' }
           ].map((option) => (
             <label
               key={option.value}
@@ -151,7 +154,7 @@ export default function PreferencesSettings({
       <div className="mt-6 flex justify-end">
         <button type="button" onClick={handleSave} className="btn btn-primary" disabled={isSaving}>
           <span className="material-symbols-outlined">save</span>
-          {isSaving ? 'Saving...' : 'Save Preferences'}
+          {isSaving ? t('preferences.saving') : t('preferences.save')}
         </button>
       </div>
     </section>

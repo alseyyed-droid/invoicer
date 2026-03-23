@@ -43,7 +43,7 @@ export default function Header({
         <div className="flex items-center gap-3">
           <Link href={`/${locale}/invoices/new`} className="btn btn-primary h-10 px-4">
             <span className="material-symbols-outlined !text-[18px]">add</span>
-            <span className="hidden sm:inline">Create Invoice</span>
+            <span className="hidden sm:inline">{t('create_invoice')}</span>
           </Link>
 
           <div className="ml-1 flex items-center gap-3 border-l border-[var(--border)] pl-4">

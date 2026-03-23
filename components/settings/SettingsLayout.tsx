@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import ProfileSettings from '@/components/settings/ProfileSettings';
 import CompanySettings from '@/components/settings/CompanySettings';
 import PreferencesSettings from '@/components/settings/PreferencesSettings';
@@ -54,6 +55,7 @@ export default function SettingsLayout({
     description: string;
   }>;
 }) {
+  const t = useTranslations('settings');
   let content: ReactNode = null;
 
   switch (activeSection) {
@@ -84,11 +86,11 @@ export default function SettingsLayout({
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <div>
-        <h1 className="page-title">{isOnboarding ? 'Set up your company' : 'Settings'}</h1>
+        <h1 className="page-title">{isOnboarding ? t('onboarding_title') : t('title')}</h1>
         <p className="page-subtitle mt-2">
           {isOnboarding
-            ? 'Complete your company profile before entering the dashboard.'
-            : 'Manage your account, company details, invoice behavior, and tax configuration.'}
+            ? t('onboarding_subtitle')
+            : t('subtitle')}
         </p>
       </div>
 

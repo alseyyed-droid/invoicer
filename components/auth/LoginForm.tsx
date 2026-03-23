@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import AuthShell from '@/components/auth/AuthShell';
@@ -12,6 +13,8 @@ type Errors = {
 };
 
 export default function LoginForm({ locale }: { locale: string }) {
+  const commonT = useTranslations('common');
+  const t = useTranslations('auth');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState('admin@example.com');
@@ -24,11 +27,11 @@ export default function LoginForm({ locale }: { locale: string }) {
     const nextErrors: Errors = {};
 
     if (!email.trim()) {
-      nextErrors.email = 'Email is required.';
+      nextErrors.email = t('validation.email_required');
     }
 
     if (!password.trim()) {
-      nextErrors.password = 'Password is required.';
+      nextErrors.password = t('validation.password_required');
     }
 
     setErrors(nextErrors);
@@ -45,7 +48,7 @@ export default function LoginForm({ locale }: { locale: string }) {
       });
 
       if (result?.error) {
-        setErrors({ form: 'Invalid email or password.' });
+        setErrors({ form: t('validation.invalid_credentials') });
         return;
       }
 
@@ -57,16 +60,16 @@ export default function LoginForm({ locale }: { locale: string }) {
   return (
     <AuthShell
       locale={locale}
-      title="Welcome back"
-      description="Sign in with your local account to access your workspace."
+      title={t('login.title')}
+      description={t('login.description')}
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="label">Email</label>
+          <label className="label">{commonT('email')}</label>
           <input
             type="email"
             className="input px-4"
-            placeholder="name@company.com"
+            placeholder={t('placeholders.email')}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
@@ -74,11 +77,11 @@ export default function LoginForm({ locale }: { locale: string }) {
         </div>
 
         <div>
-          <label className="label">Password</label>
+          <label className="label">{commonT('password')}</label>
           <input
             type="password"
             className="input px-4"
-            placeholder="Enter your password"
+            placeholder={t('placeholders.password')}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
@@ -91,7 +94,7 @@ export default function LoginForm({ locale }: { locale: string }) {
 
         <button type="submit" className="btn btn-primary w-full py-3" disabled={isPending}>
           <span className="material-symbols-outlined">login</span>
-          {isPending ? 'Signing In...' : 'Login'}
+          {isPending ? t('login.submitting') : t('login.submit')}
         </button>
       </form>
     </AuthShell>

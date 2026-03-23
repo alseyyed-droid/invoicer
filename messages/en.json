@@ -12,13 +12,187 @@
     "actions": "Actions",
     "search": "Search...",
     "logout": "Logout",
-    "profile": "Profile"
+    "profile": "Profile",
+    "create_invoice": "Create Invoice",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "language": "Language",
+    "english": "English",
+    "arabic": "Arabic",
+    "light_mode": "Light mode",
+    "dark_mode": "Dark mode",
+    "title": "Title",
+    "description": "Description",
+    "percentage": "Percentage",
+    "remove": "Remove"
   },
   "dashboard": {
     "recentInvoices": "Recent Invoices",
     "pendingInvoices": "Pending Invoices",
     "overdueInvoices": "Overdue Invoices",
-    "totalAmount": "Total Amount"
+    "totalAmount": "Total Amount",
+    "paid": "Paid",
+    "pending": "Pending",
+    "overdue": "Overdue",
+    "invoices_label": "invoices",
+    "no_invoices": "No invoices",
+    "create_first_invoice": "Create your first invoice",
+    "awaiting_payment": "Awaiting payment",
+    "past_due_date": "Past due date",
+    "invoice_history": "Invoice History",
+    "invoice": "Invoice",
+    "customer": "Customer",
+    "date": "Date",
+    "amount": "Amount",
+    "status": "Status",
+    "showing_results": "Showing {shown} of {total} invoices",
+    "previous": "Previous",
+    "next": "Next",
+    "quick_actions": {
+      "create_invoice": "Create Invoice",
+      "add_item": "Add Item",
+      "view_reports": "View Reports"
+    },
+    "footer_note": "© 2026 InvoiceGen. Designed for freelancers and small businesses."
+  },
+  "auth": {
+    "back_to_login": "Back to login",
+    "shell": {
+      "hero_title": "Clean billing workflows for freelancers and modern teams.",
+      "hero_description": "Manage invoices, line items, taxes, and company settings from one focused workspace.",
+      "stats": {
+        "invoices_issued": "Invoices issued",
+        "pending_revenue": "Pending revenue",
+        "overdue_alerts": "Overdue alerts"
+      },
+      "demo_user_notice": "Demo user is pre-seeded locally."
+    },
+    "login": {
+      "title": "Welcome back",
+      "description": "Sign in with your local account to access your workspace.",
+      "submit": "Login",
+      "submitting": "Signing In..."
+    },
+    "register": {
+      "title": "Create your account",
+      "description": "Start managing invoices, items, and settings from one workspace.",
+      "submit": "Register",
+      "submitting": "Creating Account...",
+      "already_have_account": "Already have an account?"
+    },
+    "forgot_password": {
+      "title": "Reset your password",
+      "description": "Enter your email address and we will prepare a password reset request.",
+      "submit": "Reset Password",
+      "submitting": "Submitting..."
+    },
+    "placeholders": {
+      "email": "name@company.com",
+      "password": "Enter your password",
+      "full_name": "Your full name",
+      "create_password": "Create a password",
+      "confirm_password": "Confirm your password"
+    },
+    "validation": {
+      "name_required": "Name is required.",
+      "email_required": "Email is required.",
+      "password_required": "Password is required.",
+      "passwords_mismatch": "Passwords do not match.",
+      "invalid_credentials": "Invalid email or password."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account, company details, invoice behavior, and tax configuration.",
+    "onboarding_title": "Set up your company",
+    "onboarding_subtitle": "Complete your company profile before entering the dashboard.",
+    "sections": {
+      "profile": "Profile",
+      "company": "Company",
+      "preferences": "Preferences",
+      "customization": "Customization",
+      "tax_types": "Tax Types"
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitle": "Update the core details used for your account.",
+      "mobile_number": "Mobile Number",
+      "save": "Save Profile",
+      "saving": "Saving..."
+    },
+    "password": {
+      "title": "Change Password",
+      "subtitle": "Keep your account secure with a fresh password.",
+      "current_password": "Current Password",
+      "new_password": "New Password",
+      "confirm_password": "Confirm Password",
+      "update": "Update Password",
+      "updating": "Updating..."
+    },
+    "company": {
+      "title": "Company",
+      "subtitle": "Configure the company details that appear on invoices.",
+      "company_name": "Company Name",
+      "country": "Country",
+      "city": "City",
+      "company_email": "Company Email",
+      "address": "Address",
+      "postal_code": "Postal Code",
+      "company_logo_upload": "Company Logo Upload",
+      "company_logo_preview_alt": "Company logo preview",
+      "logo_ready": "Logo ready to save",
+      "tax_per_item": "Tax per item",
+      "tax_per_item_enabled": "Taxes are applied to individual invoice items.",
+      "tax_per_item_disabled": "Taxes are applied to the invoice total.",
+      "save": "Save Company Settings",
+      "save_and_continue": "Save and Continue",
+      "saving": "Saving..."
+    },
+    "preferences": {
+      "title": "Preferences",
+      "subtitle": "Define how dates, language, and financial settings are displayed.",
+      "language": "Language",
+      "currency": "Currency",
+      "date_format": "Date Format",
+      "time_zone": "Time Zone",
+      "fiscal_year": "Fiscal Year",
+      "time_format": "Time Format",
+      "save": "Save Preferences",
+      "saving": "Saving...",
+      "options": {
+        "time_formats": {
+          "24h": "24-hour",
+          "12h": "12-hour (AM/PM)"
+        },
+        "fiscal_years": {
+          "january_december": "January - December",
+          "april_march": "April - March",
+          "july_june": "July - June"
+        }
+      }
+    },
+    "customization": {
+      "title": "Customization",
+      "subtitle": "Define how invoice numbering should look for your account.",
+      "invoice_prefix": "Invoice Prefix",
+      "invoice_separator": "Invoice Separator",
+      "invoice_number_length": "Invoice Number Length",
+      "preview": "Preview",
+      "save": "Save Customization",
+      "saving": "Saving..."
+    },
+    "tax_types": {
+      "title": "Tax Types",
+      "subtitle": "Create and manage reusable tax rates for invoice creation.",
+      "add": "Add Tax Type",
+      "add_title": "Add Tax Type",
+      "edit_title": "Edit Tax Type",
+      "modal_subtitle": "Configure a reusable tax option for invoices.",
+      "save": "Save Tax Type",
+      "saving": "Saving..."
+    }
   },
   "invoices": {
     "title": "Invoices",
@@ -220,6 +394,7 @@
   },
   "taxTypes": {
     "title": "Tax Types",
+    "subtitle": "Define the tax presets available when creating invoices and reusable items.",
     "newTaxType": "New Tax Type",
     "percentage": "Percentage"
   }

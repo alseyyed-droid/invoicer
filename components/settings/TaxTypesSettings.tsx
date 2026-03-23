@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   createTaxTypeAction,
   deleteTaxTypeAction,
@@ -21,6 +22,8 @@ export default function TaxTypesSettings({
   locale: string;
   initialTaxTypes: TaxType[];
 }) {
+  const commonT = useTranslations('common');
+  const t = useTranslations('settings');
   const [taxTypes, setTaxTypes] = useState<TaxType[]>(initialTaxTypes);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -102,12 +105,12 @@ export default function TaxTypesSettings({
       <div className="shell-card p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold">Tax Types</h2>
-            <p className="mt-1 text-sm">Create and manage reusable tax rates for invoice creation.</p>
+            <h2 className="text-xl font-bold">{t('tax_types.title')}</h2>
+            <p className="mt-1 text-sm">{t('tax_types.subtitle')}</p>
           </div>
           <button type="button" onClick={openCreate} className="btn btn-primary">
             <span className="material-symbols-outlined">add</span>
-            Add Tax Type
+            {t('tax_types.add')}
           </button>
         </div>
 
@@ -120,10 +123,10 @@ export default function TaxTypesSettings({
           <table className="w-full text-left">
             <thead className="bg-[var(--bg)]">
               <tr className="border-b border-[var(--border)]">
-                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">Title</th>
-                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">Percentage</th>
-                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">Description</th>
-                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">Actions</th>
+                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">{commonT('title')}</th>
+                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">{commonT('percentage')}</th>
+                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">{commonT('description')}</th>
+                <th className="text-muted px-5 py-3 text-xs font-bold uppercase tracking-[0.08em]">{commonT('actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)]">
@@ -140,7 +143,7 @@ export default function TaxTypesSettings({
                         className="btn btn-secondary"
                         disabled={isSaving}
                       >
-                        Edit
+                        {commonT('edit')}
                       </button>
                       <button
                         type="button"
@@ -148,7 +151,7 @@ export default function TaxTypesSettings({
                         className="btn btn-ghost text-rose-600 hover:bg-rose-50 hover:text-rose-700"
                         disabled={isSaving}
                       >
-                        Delete
+                        {commonT('delete')}
                       </button>
                     </div>
                   </td>
@@ -164,8 +167,8 @@ export default function TaxTypesSettings({
           <div className="shell-card w-full max-w-xl rounded-3xl p-6 shadow-2xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold">{editingId ? 'Edit Tax Type' : 'Add Tax Type'}</h3>
-                <p className="mt-1 text-sm">Configure a reusable tax option for invoices.</p>
+                <h3 className="text-xl font-bold">{editingId ? t('tax_types.edit_title') : t('tax_types.add_title')}</h3>
+                <p className="mt-1 text-sm">{t('tax_types.modal_subtitle')}</p>
               </div>
               <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-ghost">
                 <span className="material-symbols-outlined">close</span>
@@ -173,9 +176,9 @@ export default function TaxTypesSettings({
             </div>
 
             <div className="space-y-4">
-              <Field label="Title" value={form.title} onChange={(value) => setForm((current) => ({ ...current, title: value }))} />
+              <Field label={commonT('title')} value={form.title} onChange={(value) => setForm((current) => ({ ...current, title: value }))} />
               <Field
-                label="Percentage"
+                label={commonT('percentage')}
                 value={String(form.percentage)}
                 onChange={(value) =>
                   setForm((current) => ({
@@ -185,7 +188,7 @@ export default function TaxTypesSettings({
                 }
               />
               <div>
-                <label className="label">Description</label>
+                <label className="label">{commonT('description')}</label>
                 <textarea
                   className="textarea min-h-[120px] px-4"
                   value={form.description}
@@ -196,10 +199,10 @@ export default function TaxTypesSettings({
 
             <div className="mt-6 flex justify-end gap-3">
               <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">
-                Cancel
+                {commonT('cancel')}
               </button>
               <button type="button" onClick={saveTaxType} className="btn btn-primary" disabled={isSaving}>
-                {isSaving ? 'Saving...' : 'Save Tax Type'}
+                {isSaving ? t('tax_types.saving') : t('tax_types.save')}
               </button>
             </div>
           </div>

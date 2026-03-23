@@ -12,13 +12,187 @@
     "actions": "الإجراءات",
     "search": "بحث...",
     "logout": "تسجيل الخروج",
-    "profile": "الملف الشخصي"
+    "profile": "الملف الشخصي",
+    "create_invoice": "إنشاء فاتورة",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور",
+    "language": "اللغة",
+    "english": "الإنجليزية",
+    "arabic": "العربية",
+    "light_mode": "الوضع الفاتح",
+    "dark_mode": "الوضع الداكن",
+    "title": "العنوان",
+    "description": "الوصف",
+    "percentage": "النسبة المئوية",
+    "remove": "إزالة"
   },
   "dashboard": {
     "recentInvoices": "أحدث الفواتير",
     "pendingInvoices": "الفواتير المعلقة",
     "overdueInvoices": "الفواتير المتأخرة",
-    "totalAmount": "إجمالي المبلغ"
+    "totalAmount": "إجمالي المبلغ",
+    "paid": "مدفوعة",
+    "pending": "معلقة",
+    "overdue": "متأخرة",
+    "invoices_label": "فواتير",
+    "no_invoices": "لا توجد فواتير",
+    "create_first_invoice": "أنشئ أول فاتورة لك",
+    "awaiting_payment": "بانتظار الدفع",
+    "past_due_date": "تجاوزت تاريخ الاستحقاق",
+    "invoice_history": "سجل الفواتير",
+    "invoice": "الفاتورة",
+    "customer": "العميل",
+    "date": "التاريخ",
+    "amount": "المبلغ",
+    "status": "الحالة",
+    "showing_results": "عرض {shown} من أصل {total} فاتورة",
+    "previous": "السابق",
+    "next": "التالي",
+    "quick_actions": {
+      "create_invoice": "إنشاء فاتورة",
+      "add_item": "إضافة صنف",
+      "view_reports": "عرض التقارير"
+    },
+    "footer_note": "© 2026 InvoiceGen. مصمم للمستقلين والشركات الصغيرة."
+  },
+  "auth": {
+    "back_to_login": "العودة إلى تسجيل الدخول",
+    "shell": {
+      "hero_title": "سير عمل فوترة منظم للمستقلين والفرق الحديثة.",
+      "hero_description": "أدر الفواتير والبنود والضرائب وإعدادات الشركة من مساحة عمل واحدة مركزة.",
+      "stats": {
+        "invoices_issued": "الفواتير الصادرة",
+        "pending_revenue": "الإيرادات المعلقة",
+        "overdue_alerts": "تنبيهات التأخير"
+      },
+      "demo_user_notice": "تم تجهيز مستخدم تجريبي محليًا."
+    },
+    "login": {
+      "title": "أهلًا بعودتك",
+      "description": "سجّل الدخول باستخدام حسابك المحلي للوصول إلى مساحة العمل.",
+      "submit": "تسجيل الدخول",
+      "submitting": "جارٍ تسجيل الدخول..."
+    },
+    "register": {
+      "title": "أنشئ حسابك",
+      "description": "ابدأ بإدارة الفواتير والأصناف والإعدادات من مساحة عمل واحدة.",
+      "submit": "إنشاء الحساب",
+      "submitting": "جارٍ إنشاء الحساب...",
+      "already_have_account": "هل لديك حساب بالفعل؟"
+    },
+    "forgot_password": {
+      "title": "إعادة تعيين كلمة المرور",
+      "description": "أدخل بريدك الإلكتروني وسنجهّز طلب إعادة تعيين كلمة المرور.",
+      "submit": "إعادة تعيين كلمة المرور",
+      "submitting": "جارٍ الإرسال..."
+    },
+    "placeholders": {
+      "email": "name@company.com",
+      "password": "أدخل كلمة المرور",
+      "full_name": "اسمك الكامل",
+      "create_password": "أنشئ كلمة مرور",
+      "confirm_password": "أكّد كلمة المرور"
+    },
+    "validation": {
+      "name_required": "الاسم مطلوب.",
+      "email_required": "البريد الإلكتروني مطلوب.",
+      "password_required": "كلمة المرور مطلوبة.",
+      "passwords_mismatch": "كلمتا المرور غير متطابقتين.",
+      "invalid_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+    }
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "أدر حسابك وبيانات شركتك وسلوك الفواتير وإعدادات الضرائب.",
+    "onboarding_title": "أكمِل إعداد شركتك",
+    "onboarding_subtitle": "أكمِل ملف شركتك قبل الدخول إلى لوحة التحكم.",
+    "sections": {
+      "profile": "الملف الشخصي",
+      "company": "الشركة",
+      "preferences": "التفضيلات",
+      "customization": "التخصيص",
+      "tax_types": "أنواع الضرائب"
+    },
+    "profile": {
+      "title": "الملف الشخصي",
+      "subtitle": "حدّث البيانات الأساسية المستخدمة في حسابك.",
+      "mobile_number": "رقم الجوال",
+      "save": "حفظ الملف الشخصي",
+      "saving": "جارٍ الحفظ..."
+    },
+    "password": {
+      "title": "تغيير كلمة المرور",
+      "subtitle": "حافظ على أمان حسابك بكلمة مرور جديدة.",
+      "current_password": "كلمة المرور الحالية",
+      "new_password": "كلمة المرور الجديدة",
+      "confirm_password": "تأكيد كلمة المرور",
+      "update": "تحديث كلمة المرور",
+      "updating": "جارٍ التحديث..."
+    },
+    "company": {
+      "title": "الشركة",
+      "subtitle": "اضبط بيانات الشركة التي تظهر على الفواتير.",
+      "company_name": "اسم الشركة",
+      "country": "الدولة",
+      "city": "المدينة",
+      "company_email": "بريد الشركة الإلكتروني",
+      "address": "العنوان",
+      "postal_code": "الرمز البريدي",
+      "company_logo_upload": "رفع شعار الشركة",
+      "company_logo_preview_alt": "معاينة شعار الشركة",
+      "logo_ready": "الشعار جاهز للحفظ",
+      "tax_per_item": "الضريبة لكل بند",
+      "tax_per_item_enabled": "يتم تطبيق الضرائب على كل بند من بنود الفاتورة.",
+      "tax_per_item_disabled": "يتم تطبيق الضرائب على إجمالي الفاتورة.",
+      "save": "حفظ إعدادات الشركة",
+      "save_and_continue": "حفظ ومتابعة",
+      "saving": "جارٍ الحفظ..."
+    },
+    "preferences": {
+      "title": "التفضيلات",
+      "subtitle": "حدّد طريقة عرض التاريخ واللغة والإعدادات المالية.",
+      "language": "اللغة",
+      "currency": "العملة",
+      "date_format": "تنسيق التاريخ",
+      "time_zone": "المنطقة الزمنية",
+      "fiscal_year": "السنة المالية",
+      "time_format": "تنسيق الوقت",
+      "save": "حفظ التفضيلات",
+      "saving": "جارٍ الحفظ...",
+      "options": {
+        "time_formats": {
+          "24h": "24 ساعة",
+          "12h": "12 ساعة (ص/م)"
+        },
+        "fiscal_years": {
+          "january_december": "يناير - ديسمبر",
+          "april_march": "أبريل - مارس",
+          "july_june": "يوليو - يونيو"
+        }
+      }
+    },
+    "customization": {
+      "title": "التخصيص",
+      "subtitle": "حدّد شكل ترقيم الفواتير في حسابك.",
+      "invoice_prefix": "بادئة الفاتورة",
+      "invoice_separator": "فاصل الفاتورة",
+      "invoice_number_length": "طول رقم الفاتورة",
+      "preview": "معاينة",
+      "save": "حفظ التخصيص",
+      "saving": "جارٍ الحفظ..."
+    },
+    "tax_types": {
+      "title": "أنواع الضرائب",
+      "subtitle": "أنشئ وأدر نسب ضرائب قابلة لإعادة الاستخدام عند إنشاء الفواتير.",
+      "add": "إضافة نوع ضريبة",
+      "add_title": "إضافة نوع ضريبة",
+      "edit_title": "تعديل نوع الضريبة",
+      "modal_subtitle": "اضبط خيار ضريبة قابل لإعادة الاستخدام للفواتير.",
+      "save": "حفظ نوع الضريبة",
+      "saving": "جارٍ الحفظ..."
+    }
   },
   "invoices": {
     "title": "الفواتير",
@@ -110,11 +284,11 @@
     "totals": "الإجماليات",
     "totals_description": "تتحدث الإجماليات تلقائيًا عند تغيير البنود أو الضرائب.",
     "company_placeholder": "شركتك",
-    "thank_you": "شكراً لك!",
+    "thank_you": "شكرًا لك!",
     "no_notes": "لا توجد ملاحظات.",
     "view": "عرض",
-    "clone": "\u0627\u0633\u062a\u0646\u0633\u0627\u062e",
-    "manage_invoice": "\u0627\u0639\u0631\u0636 \u0647\u0630\u0647 \u0627\u0644\u0641\u0627\u062a\u0648\u0631\u0629 \u0623\u0648 \u0639\u062f\u0651\u0644\u0647\u0627 \u0623\u0648 \u0627\u0633\u062a\u0646\u0633\u062e\u0647\u0627 \u0623\u0648 \u0627\u062d\u0630\u0641\u0647\u0627.",
+    "clone": "استنساخ",
+    "manage_invoice": "اعرض هذه الفاتورة أو عدّلها أو استنسخها أو احذفها.",
     "confirm_delete_message": "هل أنت متأكد أنك تريد حذف هذه الفاتورة؟",
     "deleting": "جارٍ الحذف...",
     "saving": "جارٍ الحفظ...",
@@ -220,6 +394,7 @@
   },
   "taxTypes": {
     "title": "أنواع الضرائب",
+    "subtitle": "حدّد الإعدادات الضريبية الجاهزة المتاحة عند إنشاء الفواتير والأصناف القابلة لإعادة الاستخدام.",
     "newTaxType": "نوع ضريبة جديد",
     "percentage": "النسبة المئوية"
   }

@@ -1,7 +1,9 @@
 import DashboardInvoiceActions from '@/components/invoices/DashboardInvoiceActions';
+import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/prisma';
 import { InvoiceStatus } from '@/generated/prisma/client';
 import {
+  getIntlLocale,
   getInvoiceTaxHandlingFromTotal,
   getInvoiceTemplateId,
   type InvoiceSummaryRecord
@@ -17,16 +19,16 @@ function getInitials(name: string) {
     .join('');
 }
 
-function getStatusMeta(status: InvoiceStatus) {
+function getStatusMeta(status: InvoiceStatus, labels: { paid: string; overdue: string; pending: string }) {
   if (status === InvoiceStatus.PAID) {
-    return { label: 'Paid', className: 'status-paid' };
+    return { label: labels.paid, className: 'status-paid' };
   }
 
   if (status === InvoiceStatus.OVERDUE) {
-    return { label: 'Overdue', className: 'status-overdue' };
+    return { label: labels.overdue, className: 'status-overdue' };
   }
 
-  return { label: 'Pending', className: 'status-pending' };
+  return { label: labels.pending, className: 'status-pending' };
 }
 
 export default async function InvoiceTable({
@@ -38,16 +40,25 @@ export default async function InvoiceTable({
   userId: string;
   locale: string;
 }) {
+  const t = await getTranslations({ locale, namespace: 'dashboard' });
+  const commonT = await getTranslations({ locale, namespace: 'common' });
+  const intlLocale = getIntlLocale(locale);
   const invoices = await prisma.invoice.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },
     take: 10
   });
+  const resolvedTitle = title ?? t('invoice_history');
+  const statusLabels = {
+    paid: t('paid'),
+    overdue: t('overdue'),
+    pending: t('pending')
+  };
 
   return (
     <div className="table-shell">
       <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-5">
-        <h2 className="text-[17px] font-bold text-[color:var(--text)]">{title}</h2>
+        <h2 className="text-[17px] font-bold text-[color:var(--text)]">{resolvedTitle}</h2>
         <div className="flex gap-2">
           <button className="text-muted rounded-lg p-2 hover:bg-[var(--bg)]">
             <span className="material-symbols-outlined">filter_list</span>
@@ -60,10 +71,8 @@ export default async function InvoiceTable({
 
       {invoices.length === 0 ? (
         <div className="px-5 py-14 text-center">
-          <p className="text-lg font-semibold text-[color:var(--text)]">No invoices yet</p>
-          <p className="text-muted mt-2 text-sm">
-            Create your first invoice and it will appear here.
-          </p>
+          <p className="text-lg font-semibold text-[color:var(--text)]">{t('no_invoices')}</p>
+          <p className="text-muted mt-2 text-sm">{t('create_first_invoice')}</p>
         </div>
       ) : (
         <>
@@ -72,29 +81,29 @@ export default async function InvoiceTable({
               <thead>
                 <tr className="border-b border-[var(--border)] bg-[var(--bg)]">
                   <th className="text-muted px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em]">
-                    Invoice
+                    {t('invoice')}
                   </th>
                   <th className="text-muted px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em]">
-                    Customer
+                    {t('customer')}
                   </th>
                   <th className="text-muted px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em]">
-                    Date
+                    {t('date')}
                   </th>
                   <th className="text-muted px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em]">
-                    Amount
+                    {t('amount')}
                   </th>
                   <th className="text-muted px-5 py-3 text-[11px] font-bold uppercase tracking-[0.08em]">
-                    Status
+                    {t('status')}
                   </th>
                   <th className="text-muted px-5 py-3 text-right text-[11px] font-bold uppercase tracking-[0.08em]">
-                    Actions
+                    {commonT('actions')}
                   </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-[var(--border)]">
                 {invoices.map((invoice) => {
-                  const status = getStatusMeta(invoice.status);
+                  const status = getStatusMeta(invoice.status, statusLabels);
                   const invoiceSummary: InvoiceSummaryRecord = {
                     id: invoice.id,
                     invoiceNumber: invoice.number,
@@ -133,10 +142,10 @@ export default async function InvoiceTable({
                         </div>
                       </td>
                       <td className="text-muted px-5 py-5 text-[15px]">
-                        {formatDate(invoice.invoiceDate)}
+                        {formatDate(invoice.invoiceDate, intlLocale)}
                       </td>
                       <td className="px-5 py-5 text-[15px] font-semibold text-[color:var(--text)]">
-                        {formatCurrency(invoice.grandTotal)}
+                        {formatCurrency(invoice.grandTotal, 'USD', intlLocale)}
                       </td>
                       <td className="px-5 py-5">
                         <span className={`status-chip ${status.className}`}>{status.label}</span>
@@ -156,14 +165,14 @@ export default async function InvoiceTable({
 
           <div className="flex items-center justify-between border-t border-[var(--border)] bg-[var(--bg)] px-5 py-4">
             <p className="text-muted text-[15px]">
-              Showing {Math.min(invoices.length, 10)} of {invoices.length} invoices
+              {t('showing_results', { shown: Math.min(invoices.length, 10), total: invoices.length })}
             </p>
             <div className="flex gap-2">
               <button className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-1.5 text-sm font-medium text-[color:var(--text)] hover:bg-[var(--bg)]">
-                Previous
+                {t('previous')}
               </button>
               <button className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-1.5 text-sm font-medium text-[color:var(--text)] hover:bg-[var(--bg)]">
-                Next
+                {t('next')}
               </button>
             </div>
           </div>
