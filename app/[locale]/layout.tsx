@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import SubNav from '@/components/layout/SubNav';
 import { auth } from '@/auth';
-import { prisma } from '@/lib/prisma';
 
 const locales = ['en', 'ar'] as const;
 
@@ -28,15 +27,6 @@ export default async function LocaleLayout({
   const messages = await getMessages({ locale });
   const session = await auth();
   const direction = locale === 'ar' ? 'rtl' : 'ltr';
-  const currentUser = session?.user?.id
-    ? await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: {
-          name: true,
-          email: true
-        }
-      })
-    : null;
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
@@ -45,8 +35,8 @@ export default async function LocaleLayout({
           <>
             <Header
               locale={locale}
-              userName={currentUser?.name ?? session.user?.name ?? 'Admin User'}
-              userEmail={currentUser?.email ?? session.user?.email}
+              userName={session.user?.name ?? 'Admin User'}
+              userEmail={session.user?.email}
             />
             <div className="flex flex-1 overflow-hidden">
               <SubNav />

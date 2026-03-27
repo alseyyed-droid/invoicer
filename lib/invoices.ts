@@ -112,6 +112,29 @@ export type InvoiceCompanyInfo = {
   taxPerItem: boolean;
 };
 
+export const emptyInvoiceCompanyInfo: InvoiceCompanyInfo = {
+  companyName: null,
+  companyEmail: null,
+  address: null,
+  city: null,
+  country: null,
+  postalCode: null,
+  companyLogo: null,
+  taxPerItem: false
+};
+
+export function hasInvoiceCompanyInfo(companyInfo: InvoiceCompanyInfo) {
+  return Boolean(
+    companyInfo.companyName ||
+      companyInfo.companyEmail ||
+      companyInfo.address ||
+      companyInfo.city ||
+      companyInfo.country ||
+      companyInfo.postalCode ||
+      companyInfo.companyLogo
+  );
+}
+
 export type InvoiceSummaryRecord = Omit<InvoicePreviewData, 'id'> & {
   id: string;
   status: InvoiceStatus;

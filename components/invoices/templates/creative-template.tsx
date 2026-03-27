@@ -1,6 +1,6 @@
 import { formatCurrency, formatDate } from '@/lib/utils';
 import type { InvoiceRenderContext, TemplateRenderer } from './template-types';
-import { CompanyLogo, lightInvoiceThemeStyle } from './shared';
+import { CompanyLogo, hasCompanyDetails, lightInvoiceThemeStyle } from './shared';
 
 export const creativeTemplate: TemplateRenderer = {
   articleClassName: 'border-emerald-200 shadow-[0_24px_80px_rgba(5,150,105,0.08)]',
@@ -15,6 +15,7 @@ export const creativeTemplate: TemplateRenderer = {
 
 export function renderCreativeTemplate(context: InvoiceRenderContext) {
   const isArabic = context.intlLocale.startsWith('ar');
+  const showCompany = hasCompanyDetails(context.companyInfo);
   const accentGradient = isArabic
     ? 'linear-gradient(270deg,#065f46 0%,#10b981 55%,#52e3a9 100%)'
     : 'linear-gradient(90deg,#065f46 0%,#10b981 55%,#52e3a9 100%)';
@@ -25,8 +26,6 @@ export function renderCreativeTemplate(context: InvoiceRenderContext) {
     context.companyLocation
   ].filter((line): line is string => Boolean(line));
 
-  const signerName = context.companyInfo.companyName || context.t('company_placeholder');
-
   return (
     <div
       className="relative flex min-h-[1240px] flex-col overflow-hidden rounded-[18px] bg-white text-[#1f2937] md:px-10 md:py-10"
@@ -36,21 +35,28 @@ export function renderCreativeTemplate(context: InvoiceRenderContext) {
       <CornerAccent position="bottom-left" />
 
       <section className="relative flex flex-col items-center justify-center gap-5 text-center md:flex-row md:gap-6 md:text-left">
-        <CompanyLogo
-          companyInfo={context.companyInfo}
-          companyInitial={context.companyInitial}
-          className="h-20 w-20 rounded-[20px]"
-          fallbackClassName="bg-[linear-gradient(135deg,#065f46,#10b981)] text-white"
-        />
+        {showCompany ? (
+          <>
+            <CompanyLogo
+              companyInfo={context.companyInfo}
+              companyInitial={context.companyInitial}
+              className="h-20 w-20 rounded-[20px]"
+              fallbackClassName="bg-[linear-gradient(135deg,#065f46,#10b981)] text-white"
+            />
 
-        <div>
-          <h1 className="text-4xl mt-8 font-bold tracking-[-0.04em] text-[#202124] md:text-5xl">
-            {context.companyInfo.companyName || context.t('company_placeholder')}
-          </h1>
-          <p className="mt-2 text-sm font-semibold uppercase tracking-[0.35em] text-[#14532d] md:text-base">
-            Creative Agency
-          </p>
-        </div>
+            <div>
+              <h1 className="mt-8 text-4xl font-bold tracking-[-0.04em] text-[#202124] md:text-5xl">
+                {context.companyInfo.companyName}
+              </h1>
+            </div>
+          </>
+        ) : (
+          <div>
+            <h1 className="mt-8 text-4xl font-bold tracking-[-0.04em] text-[#202124] md:text-5xl">
+              {context.t('invoice_document')}
+            </h1>
+          </div>
+        )}
       </section>
 
       <section className="relative mt-16 grid gap-8 print:grid-cols-3 md:grid-cols-3">
@@ -113,25 +119,21 @@ export function renderCreativeTemplate(context: InvoiceRenderContext) {
       </section>
 
       <section className="relative mt-8 grid gap-8 border-t border-[#9ca3af] pt-6 print:grid-cols-[minmax(0,1fr)_220px] md:grid-cols-[minmax(0,1fr)_220px]">
-        <div>
-          <p className="text-lg font-medium text-[#374151]">{context.t('payment_method')}</p>
-          <div className="mt-3 space-y-1 text-base text-[#374151]">
-            {paymentLines.length ? (
-              paymentLines.map((line) => <p key={line}>{line}</p>)
-            ) : (
-              <p>{context.t('company_placeholder')}</p>
-            )}
+        {showCompany ? (
+          <div>
+            <p className="text-lg font-medium text-[#374151]">{context.t('payment_method')}</p>
+            <div className="mt-3 space-y-1 text-base text-[#374151]">
+              {paymentLines.map((line) => <p key={line}>{line}</p>)}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div />
+        )}
 
         <div className="space-y-3">
           <SummaryRow
             label={context.t('subtotal')}
             value={formatCurrency(context.invoice.subtotal, context.currency, context.intlLocale)}
-          />
-          <SummaryRow
-            label={context.t('tax_total')}
-            value={formatCurrency(context.invoice.taxTotal, context.currency, context.intlLocale)}
           />
           <SummaryRow
             label={context.t('discount')}
@@ -146,7 +148,7 @@ export function renderCreativeTemplate(context: InvoiceRenderContext) {
         </div>
       </section>
 
-      <section className="relative pt-12 mb-24 grid gap-10 print:grid-cols-[minmax(0,1fr)_220px] md:grid-cols-[minmax(0,1fr)_220px">
+      <section className="relative mb-24 grid gap-10 pt-12 print:grid-cols-[minmax(0,1fr)_220px] md:grid-cols-[minmax(0,1fr)_220px]">
         <div>
           <h2 className="text-3xl font-bold text-[#111827]">
             {context.t('thank_you')}

@@ -8,9 +8,7 @@ import { cn } from '@/lib/utils';
 import { settingsSections } from '@/components/settings/sections';
 
 const icons = {
-  dashboard: 'dashboard',
   invoices: 'description',
-  items: 'inventory_2',
   settings: 'settings'
 } as const;
 
@@ -30,9 +28,7 @@ export default function SubNav() {
   }, [locale, pathname]);
 
   const navItems = [
-    { name: t('dashboard'), href: `/${locale}`, icon: icons.dashboard },
-    { name: t('invoices'), href: `/${locale}/invoices`, icon: icons.invoices },
-    { name: t('items'), href: `/${locale}/items`, icon: icons.items }
+    { name: t('invoices'), href: `/${locale}/invoices`, icon: icons.invoices }
   ];
 
   const settingsHref = `/${locale}/settings?section=profile`;

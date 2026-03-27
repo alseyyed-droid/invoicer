@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Invoice Generator',
-  description: 'Manage invoices, items, taxes, and company settings.'
+  description: 'Generate invoices and review invoice history from one focused workspace.'
 };
 
 export default function RootLayout({

@@ -3,6 +3,7 @@ import type { InvoiceRenderContext, TemplateRenderer } from './template-types';
 import {
   CompanyDetails,
   CompanyLogo,
+  hasCompanyDetails,
   InvoiceItemsTable,
   MetaPanel,
   NotesCard,
@@ -21,33 +22,46 @@ export const vintageTemplate: TemplateRenderer = {
 };
 
 export function renderVintageTemplate(context: InvoiceRenderContext) {
+  const showCompany = hasCompanyDetails(context.companyInfo);
+
   return (
     <div className="space-y-8" style={{ zoom: 0.85 }}>
       <section className="rounded-[30px] border-2 border-[color:color-mix(in_srgb,#a16207_24%,var(--border))] px-6 py-7">
         <div className="flex flex-col gap-6 border-b border-[color:color-mix(in_srgb,#a16207_18%,var(--border))] pb-6 md:flex-row md:items-end md:justify-between">
-          <div className="flex items-start gap-4">
-            <CompanyLogo
-              companyInfo={context.companyInfo}
-              companyInitial={context.companyInitial}
-              className="h-16 w-16 rounded-full border-2 border-[rgba(126,77,36,0.4)] p-1"
-              imageClassName="rounded-full"
-              fallbackClassName="bg-[color:color-mix(in_srgb,#a16207_14%,var(--surface))] text-[color:color-mix(in_srgb,#5b3a21_72%,var(--text))]"
-            />
+          {showCompany ? (
+            <div className="flex items-start gap-4">
+              <CompanyLogo
+                companyInfo={context.companyInfo}
+                companyInitial={context.companyInitial}
+                className="h-16 w-16 rounded-full border-2 border-[rgba(126,77,36,0.4)] p-1"
+                imageClassName="rounded-full"
+                fallbackClassName="bg-[color:color-mix(in_srgb,#a16207_14%,var(--surface))] text-[color:color-mix(in_srgb,#5b3a21_72%,var(--text))]"
+              />
 
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[color:color-mix(in_srgb,#5b3a21_58%,var(--text))]">
+                  {context.t('invoice_document')}
+                </p>
+                <h1 className="mt-3 text-4xl font-semibold tracking-[0.04em] text-[color:color-mix(in_srgb,#5b3a21_72%,var(--text))]">
+                  {context.companyInfo.companyName}
+                </h1>
+                <CompanyDetails
+                  companyInfo={context.companyInfo}
+                  companyLocation={context.companyLocation}
+                  className="mt-4 space-y-1 text-sm text-[color:color-mix(in_srgb,#5b3a21_58%,var(--text))]"
+                />
+              </div>
+            </div>
+          ) : (
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[color:color-mix(in_srgb,#5b3a21_58%,var(--text))]">
                 {context.t('invoice_document')}
               </p>
               <h1 className="mt-3 text-4xl font-semibold tracking-[0.04em] text-[color:color-mix(in_srgb,#5b3a21_72%,var(--text))]">
-                {context.companyInfo.companyName || context.t('company_placeholder')}
+                {context.t('invoice_document')}
               </h1>
-              <CompanyDetails
-                companyInfo={context.companyInfo}
-                companyLocation={context.companyLocation}
-                className="mt-4 space-y-1 text-sm text-[color:color-mix(in_srgb,#5b3a21_58%,var(--text))]"
-              />
             </div>
-          </div>
+          )}
 
           <div className="grid gap-3 text-right md:min-w-[280px]">
             <MetaPanel

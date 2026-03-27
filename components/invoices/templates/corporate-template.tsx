@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import type { InvoiceRenderContext, TemplateRenderer } from './template-types';
-import { CompanyLogo, lightInvoiceThemeStyle } from './shared';
+import { CompanyLogo, hasCompanyDetails, lightInvoiceThemeStyle } from './shared';
 
 const MIN_TABLE_ROWS = 7;
 
@@ -18,6 +18,7 @@ export const corporateTemplate: TemplateRenderer = {
 };
 
 export function renderCorporateTemplate(context: InvoiceRenderContext) {
+  const showCompany = hasCompanyDetails(context.companyInfo);
   const paymentLines = [
     context.companyInfo.companyName,
     context.companyInfo.companyEmail,
@@ -42,20 +43,22 @@ export function renderCorporateTemplate(context: InvoiceRenderContext) {
           </h1>
         </div>
 
-        <div className="flex items-center gap-3 text-right">
-          <div>
-            <p className="text-[18px] font-semibold uppercase tracking-[0.03em] text-[#2b2b2b]">
-              {context.companyInfo.companyName || context.t('company_placeholder')}
-            </p>
+        {showCompany && (
+          <div className="flex items-center gap-3 text-right">
+            <div>
+              <p className="text-[18px] font-semibold uppercase tracking-[0.03em] text-[#2b2b2b]">
+                {context.companyInfo.companyName}
+              </p>
+            </div>
+            <CompanyLogo
+              companyInfo={context.companyInfo}
+              companyInitial={context.companyInitial}
+              className="h-10 w-10 rounded-full border border-[#d2d5db]"
+              imageClassName="rounded-full"
+              fallbackClassName="bg-white text-sm font-semibold text-[#222]"
+            />
           </div>
-          <CompanyLogo
-            companyInfo={context.companyInfo}
-            companyInitial={context.companyInitial}
-            className="h-10 w-10 rounded-full border border-[#d2d5db]"
-            imageClassName="rounded-full"
-            fallbackClassName="bg-white text-sm font-semibold text-[#222]"
-          />
-        </div>
+        )}
       </section>
 
       <section className="grid gap-x-12 gap-y-6 print:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] print:grid-rows-[auto_auto_auto] md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:grid-rows-[auto_auto_auto]">
@@ -76,16 +79,14 @@ export function renderCorporateTemplate(context: InvoiceRenderContext) {
           </div>
         </div>
 
-        <div className="print:col-start-2 print:row-start-2 print:row-span-2 md:col-start-2 md:row-start-2 md:row-span-2">
-          <p className="text-[17px] text-[#2d2d2d]">{context.t('payment_method')}:</p>
-          <div className="mt-3 space-y-1 text-[#3a3a3a]">
-            {paymentLines.length ? (
-              paymentLines.map((line) => <p key={line}>{line}</p>)
-            ) : (
-              <p>{context.t('company_placeholder')}</p>
-            )}
+        {showCompany && (
+          <div className="print:col-start-2 print:row-start-2 print:row-span-2 md:col-start-2 md:row-start-2 md:row-span-2">
+            <p className="text-[17px] text-[#2d2d2d]">{context.t('payment_method')}:</p>
+            <div className="mt-3 space-y-1 text-[#3a3a3a]">
+              {paymentLines.map((line) => <p key={line}>{line}</p>)}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       <section>
@@ -132,21 +133,16 @@ export function renderCorporateTemplate(context: InvoiceRenderContext) {
             {context.t('thank_you')}
           </h2>
 
-          <div className="mt-12 space-y-2 text-[14px] text-[#434343]">
-            {contactLines.length ? (
-              contactLines.map((line) => (
+          {showCompany && (
+            <div className="mt-12 space-y-2 text-[14px] text-[#434343]">
+              {contactLines.map((line) => (
                 <div key={line} className="flex items-center gap-2">
                   <span className="inline-block h-[6px] w-[6px] rounded-full bg-[#5c5c5c]" />
                   <span>{line}</span>
                 </div>
-              ))
-            ) : (
-              <div className="flex items-center gap-2">
-                <span className="inline-block h-[6px] w-[6px] rounded-full bg-[#5c5c5c]" />
-                <span>{context.companyInfo.companyName || context.t('company_placeholder')}</span>
-              </div>
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="space-y-10">

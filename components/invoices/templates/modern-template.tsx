@@ -3,6 +3,7 @@ import type { InvoiceRenderContext, TemplateRenderer } from './template-types';
 import {
   CompanyDetails,
   CompanyLogo,
+  hasCompanyDetails,
   InvoiceItemsTable,
   MetaPanel,
   ModernMetricCard,
@@ -21,33 +22,46 @@ export const modernTemplate: TemplateRenderer = {
 };
 
 export function renderModernTemplate(context: InvoiceRenderContext) {
+  const showCompany = hasCompanyDetails(context.companyInfo);
+
   return (
     <div className="space-y-8" style={{ zoom: 0.85 }}>
       <section className="rounded-[32px] border border-[color:color-mix(in_srgb,var(--surface)_10%,transparent)] bg-[color:color-mix(in_srgb,var(--surface)_5%,transparent)] px-6 py-6 shadow-[0_20px_60px_rgba(2,6,23,0.35)] backdrop-blur-sm">
         <div className="grid gap-8 md:grid-cols-[minmax(0,1.2fr)_300px] md:items-start">
           <div>
-            <div className="flex items-start gap-4">
-              <CompanyLogo
-                companyInfo={context.companyInfo}
-                companyInitial={context.companyInitial}
-                className="h-16 w-16 rounded-[24px] ring-1 ring-emerald-400/30"
-                fallbackClassName="bg-emerald-400 text-slate-950"
-              />
+            {showCompany ? (
+              <div className="flex items-start gap-4">
+                <CompanyLogo
+                  companyInfo={context.companyInfo}
+                  companyInitial={context.companyInitial}
+                  className="h-16 w-16 rounded-[24px] ring-1 ring-emerald-400/30"
+                  fallbackClassName="bg-emerald-400 text-slate-950"
+                />
 
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-300">
+                    {context.t('invoice_document')}
+                  </p>
+                  <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-white">
+                    {context.companyInfo.companyName}
+                  </h1>
+                  <CompanyDetails
+                    companyInfo={context.companyInfo}
+                    companyLocation={context.companyLocation}
+                    className="mt-4 space-y-1 text-sm text-[color:color-mix(in_srgb,var(--surface)_72%,transparent)]"
+                  />
+                </div>
+              </div>
+            ) : (
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-300">
                   {context.t('invoice_document')}
                 </p>
                 <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-white">
-                  {context.companyInfo.companyName || context.t('company_placeholder')}
+                  {context.t('invoice_document')}
                 </h1>
-                <CompanyDetails
-                  companyInfo={context.companyInfo}
-                  companyLocation={context.companyLocation}
-                  className="mt-4 space-y-1 text-sm text-[color:color-mix(in_srgb,var(--surface)_72%,transparent)]"
-                />
               </div>
-            </div>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -84,10 +98,6 @@ export function renderModernTemplate(context: InvoiceRenderContext) {
           <ModernMetricCard
             label={context.t('subtotal')}
             value={formatCurrency(context.invoice.subtotal, context.currency, context.intlLocale)}
-          />
-          <ModernMetricCard
-            label={context.t('tax_total')}
-            value={formatCurrency(context.invoice.taxTotal, context.currency, context.intlLocale)}
           />
           <ModernMetricCard
             label={context.t('discount')}

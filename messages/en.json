@@ -61,7 +61,7 @@
     "back_to_login": "Back to login",
     "shell": {
       "hero_title": "Clean billing workflows for freelancers and modern teams.",
-      "hero_description": "Manage invoices, line items, taxes, and company settings from one focused workspace.",
+      "hero_description": "Generate polished invoices and keep your invoice history organized from one focused workspace.",
       "stats": {
         "invoices_issued": "Invoices issued",
         "pending_revenue": "Pending revenue",
@@ -77,7 +77,7 @@
     },
     "register": {
       "title": "Create your account",
-      "description": "Start managing invoices, items, and settings from one workspace.",
+      "description": "Start generating invoices and tracking invoice history from one workspace.",
       "submit": "Register",
       "submitting": "Creating Account...",
       "already_have_account": "Already have an account?"
@@ -105,7 +105,7 @@
   },
   "settings": {
     "title": "Settings",
-    "subtitle": "Manage your account, company details, invoice behavior, and tax configuration.",
+    "subtitle": "Manage your account, invoice preferences, and numbering behavior.",
     "onboarding_title": "Set up your company",
     "onboarding_subtitle": "Complete your company profile before entering the dashboard.",
     "sections": {
@@ -200,9 +200,9 @@
     "newInvoice": "New Invoice",
     "create_invoice": "Create Invoice",
     "create_invoice_title": "Create Invoice",
-    "create_invoice_subtitle": "Build polished invoices with reusable items, tax presets, and live totals.",
+    "create_invoice_subtitle": "Build polished invoices with manual line items and live totals.",
     "edit_invoice_title": "Edit Invoice",
-    "edit_invoice_subtitle": "Update invoice details, line items, taxes, and template settings.",
+    "edit_invoice_subtitle": "Update invoice details, line items, notes, and template settings.",
     "invoiceNumber": "Invoice Number",
     "invoice_number": "Invoice Number",
     "customer": "Customer",
@@ -252,7 +252,7 @@
     "empty_title": "No invoices yet",
     "empty_description": "Create your first invoice to start tracking customers, totals, and payment status.",
     "customer_invoice_information": "Customer & Invoice Information",
-    "customer_invoice_information_description": "Set the customer details, invoice number, date, and tax handling.",
+    "customer_invoice_information_description": "Set the customer details, invoice number, and invoice date.",
     "saved_item_mode": "Select from saved items or add custom lines.",
     "manual_item_mode": "Add manual line items because no saved items are available yet.",
     "add_item": "Add Item",

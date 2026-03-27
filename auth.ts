@@ -12,22 +12,17 @@ export function getCompanySetupPath(locale: string = 'en') {
 }
 
 export function getDashboardPath(locale: string = 'en') {
-  return `/${locale}`;
+  return `/${locale}/invoices`;
 }
 
 export async function hasCompletedCompanySetup(userId: string) {
-  const companyInfo = await prisma.companyInfo.findUnique({
-    where: { userId },
-    select: { companyName: true }
-  });
-
-  return Boolean(companyInfo?.companyName?.trim());
+  void userId;
+  return true;
 }
 
 export async function getAuthenticatedHomePath(userId: string, locale: string = 'en') {
-  const hasCompletedSetup = await hasCompletedCompanySetup(userId);
-
-  return hasCompletedSetup ? getDashboardPath(locale) : getCompanySetupPath(locale);
+  void userId;
+  return getDashboardPath(locale);
 }
 
 export const authOptions: NextAuthOptions = {
@@ -97,19 +92,11 @@ export async function requireAuth(
     enforceCompanySetup?: boolean;
   } = {}
 ) {
+  void options;
   const session = await auth();
 
   if (!session?.user?.id) {
     redirect(`/${locale}/login`);
   }
-
-  if (options.enforceCompanySetup !== false) {
-    const hasCompletedSetup = await hasCompletedCompanySetup(session.user.id);
-
-    if (!hasCompletedSetup) {
-      redirect(getCompanySetupPath(locale));
-    }
-  }
-
   return session;
 }

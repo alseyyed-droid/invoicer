@@ -1,19 +1,11 @@
 'use client';
 
 import InvoiceEditor from '@/components/invoices/InvoiceEditor';
-import type {
-  InvoiceCompanyInfo,
-  InvoicePreviewData,
-  InvoiceTaxOption,
-  SavedInvoiceItem
-} from '@/lib/invoices';
+import type { InvoicePreviewData } from '@/lib/invoices';
 
 type EditInvoicePageProps = {
   locale: string;
   currency: string;
-  companyInfo: InvoiceCompanyInfo;
-  savedItems: SavedInvoiceItem[];
-  taxTypes: InvoiceTaxOption[];
   initialInvoiceNumber: string;
   invoice: InvoicePreviewData & { id: string };
 };

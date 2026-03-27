@@ -19,7 +19,7 @@ export default function Header({
     <header className="topbar shrink-0">
       <div className="topbar-inner">
         <div className="flex items-center gap-8">
-          <Link href={`/${locale}`} className="flex items-center gap-2.5">
+          <Link href={`/${locale}/invoices`} className="flex items-center gap-2.5">
             <div className="brand-mark">
               <span className="material-symbols-outlined !text-[16px]">receipt_long</span>
             </div>

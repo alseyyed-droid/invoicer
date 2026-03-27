@@ -14,19 +14,25 @@ function buildClonedInvoice(
     invoiceDate: sourceInvoice.invoiceDate,
     customerName: sourceInvoice.customerName,
     customerEmail: sourceInvoice.customerEmail,
-    taxType: sourceInvoice.taxType,
+    taxType: 'tax_free',
     templateId: sourceInvoice.templateId,
     discountType: sourceInvoice.discountType,
     discountValue: sourceInvoice.discountValue,
     discountAmount: sourceInvoice.discountAmount,
     notes: sourceInvoice.notes,
     subtotal: sourceInvoice.subtotal,
-    taxTotal: sourceInvoice.taxTotal,
-    grandTotal: sourceInvoice.grandTotal,
+    taxTotal: 0,
+    grandTotal: Math.max(0, sourceInvoice.subtotal - sourceInvoice.discountAmount),
     items: sourceInvoice.items.map((item) => ({
       ...item,
       id: '',
-      savedItemId: ''
+      savedItemId: '',
+      taxTypeIds: [],
+      taxes: [],
+      taxRate: 0,
+      taxAmount: 0,
+      taxLabel: null,
+      lineGrandTotal: item.lineSubtotal
     }))
   };
 }
@@ -47,53 +53,6 @@ export default async function CloneInvoiceRoute({
         preferences: {
           select: {
             currency: true
-          }
-        },
-        companyInfo: {
-          select: {
-            companyName: true,
-            companyEmail: true,
-            address: true,
-            city: true,
-            country: true,
-            postalCode: true,
-            companyLogo: true,
-            taxPerItem: true
-          }
-        },
-        items: {
-          where: {
-            userId: session.user.id
-          },
-          orderBy: {
-            updatedAt: 'desc'
-          },
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            unitType: true,
-            taxTypeId: true,
-            taxType: {
-              select: {
-                id: true,
-                title: true,
-                percentage: true
-              }
-            }
-          }
-        },
-        taxTypes: {
-          where: {
-            userId: session.user.id
-          },
-          orderBy: {
-            createdAt: 'desc'
-          },
-          select: {
-            id: true,
-            title: true,
-            percentage: true
           }
         },
         invoices: {
@@ -130,25 +89,6 @@ export default async function CloneInvoiceRoute({
     <CreateInvoicePage
       locale={locale}
       currency={user.preferences?.currency ?? 'USD'}
-      companyInfo={{
-        companyName: user.companyInfo?.companyName,
-        companyEmail: user.companyInfo?.companyEmail,
-        address: user.companyInfo?.address,
-        city: user.companyInfo?.city,
-        country: user.companyInfo?.country,
-        postalCode: user.companyInfo?.postalCode,
-        companyLogo: user.companyInfo?.companyLogo,
-        taxPerItem: user.companyInfo?.taxPerItem ?? true
-      }}
-      taxTypes={user.taxTypes}
-      savedItems={user.items.map((item) => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        unitType: item.unitType,
-        taxTypeId: item.taxTypeId,
-        taxType: item.taxType
-      }))}
       initialInvoiceNumber={initialInvoiceNumber}
       invoice={buildClonedInvoice(sourceInvoice, initialInvoiceNumber)}
     />

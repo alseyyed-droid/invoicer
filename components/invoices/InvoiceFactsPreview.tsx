@@ -33,16 +33,9 @@ export default function InvoiceFactsPreview({
   companyInfo,
   invoice
 }: InvoiceFactsPreviewProps) {
+  void companyInfo;
   const t = useTranslations('invoices');
   const intlLocale = getIntlLocale(locale);
-  const companyLocation = [companyInfo.city, companyInfo.country, companyInfo.postalCode]
-    .filter(Boolean)
-    .join(', ');
-  const companyName = companyInfo.companyName || t('company_placeholder');
-  const companyInitial = companyName.slice(0, 1).toUpperCase();
-  const companyLines = [companyInfo.companyEmail, companyInfo.address, companyLocation].filter(
-    (line): line is string => Boolean(line)
-  );
   const customerEmail = invoice.customerEmail?.trim() || '-';
   const discountValue =
     invoice.discountType === 'percentage'
@@ -51,37 +44,7 @@ export default function InvoiceFactsPreview({
 
   return (
     <article className="mx-auto max-w-5xl rounded-[32px] bg-[var(--surface)] p-5 md:p-8">
-      <section className="flex flex-col items-center justify-center text-center">
-        <div className="flex flex-col items-center gap-4">
-          {companyInfo.companyLogo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={companyInfo.companyLogo}
-              alt={companyName}
-              className="h-16 w-16 rounded-[22px] object-cover"
-              crossOrigin="anonymous"
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-[22px] bg-[var(--bg)] text-xl font-bold text-[color:var(--text)]">
-              {companyInitial}
-            </div>
-          )}
-
-          <div>
-            <h3 className="text-2xl font-bold tracking-[-0.03em] text-[color:var(--text)]">{companyName}</h3>
-            {companyLines.length > 0 && (
-              <div className="mt-2 space-y-1 text-sm text-muted">
-                {companyLines.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-10">
+      <section>
         <div className="mb-4">
           <h4 className="text-lg font-bold text-[color:var(--text)]">{t('invoice_document')}</h4>
           <p className="mt-1 text-sm text-muted">{t('preview_description')}</p>
@@ -92,7 +55,6 @@ export default function InvoiceFactsPreview({
           <DetailItem label={t('invoice_date')} value={formatDate(invoice.invoiceDate, intlLocale)} />
           <DetailItem label={t('customer_name')} value={invoice.customerName} />
           <DetailItem label={t('customer_email')} value={customerEmail} />
-          <DetailItem label={t('tax_type')} value={t(`tax_type_options.${invoice.taxType}`)} />
           <DetailItem label={t('discount_type')} value={t(`discount_types.${invoice.discountType}`)} />
           <DetailItem label={t('discount_value')} value={discountValue} />
         </div>
@@ -102,10 +64,10 @@ export default function InvoiceFactsPreview({
         <h4 className="text-lg font-bold text-[color:var(--text)]">{t('invoice_items')}</h4>
         <div className="mt-4 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] border-collapse text-left">
+            <table className="w-full min-w-[640px] border-collapse text-left">
               <thead>
                 <tr>
-                  {['item', 'unit_type', 'price', 'quantity', 'tax', 'total'].map((key) => (
+                  {['item', 'unit_type', 'price', 'quantity', 'total'].map((key) => (
                     <th
                       key={key}
                       className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted"
@@ -124,7 +86,6 @@ export default function InvoiceFactsPreview({
                       {formatCurrency(item.price, currency, intlLocale)}
                     </td>
                     <td className="px-4 py-3 text-sm text-[color:var(--text)]">{item.quantity}</td>
-                    <td className="px-4 py-3 text-sm text-muted">{item.taxLabel || t('no_tax')}</td>
                     <td className="px-4 py-3 text-sm font-semibold text-[color:var(--text)]">
                       {formatCurrency(item.lineGrandTotal, currency, intlLocale)}
                     </td>
@@ -156,12 +117,6 @@ export default function InvoiceFactsPreview({
               <span className="text-muted">{t('subtotal')}</span>
               <span className="font-semibold text-[color:var(--text)]">
                 {formatCurrency(invoice.subtotal, currency, intlLocale)}
-              </span>
-            </div>
-            <div className="flex items-center justify-between gap-4 text-sm">
-              <span className="text-muted">{t('tax_total')}</span>
-              <span className="font-semibold text-[color:var(--text)]">
-                {formatCurrency(invoice.taxTotal, currency, intlLocale)}
               </span>
             </div>
             <div className="flex items-center justify-between gap-4 text-sm">

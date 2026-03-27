@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import InvoiceDocument from '@/components/invoices/InvoiceDocument';
-import { invoiceTemplates, type InvoiceTemplateId } from '@/lib/invoices';
+import { emptyInvoiceCompanyInfo, invoiceTemplates, type InvoiceTemplateId } from '@/lib/invoices';
 import { cn } from '@/lib/utils';
 
 type InvoiceTemplateSelectorModalProps = {
@@ -12,30 +12,19 @@ type InvoiceTemplateSelectorModalProps = {
   onClose: () => void;
 };
 
-const previewCompanyInfo = {
-  companyName: 'Northline Studio',
-  companyEmail: 'hello@northline.example',
-  address: '18 Mercer Street',
-  city: 'Amman',
-  country: 'Jordan',
-  postalCode: '11181',
-  companyLogo: null,
-  taxPerItem: true
-};
-
 const previewBaseInvoice = {
   invoiceNumber: 'INV-24018',
   invoiceDate: '2026-03-22',
   customerName: 'Atlas Retail',
   customerEmail: 'ops@atlas.example',
-  taxType: 'taxable' as const,
+  taxType: 'tax_free' as const,
   discountType: 'fixed' as const,
   discountValue: 120,
   discountAmount: 120,
   notes: '<p>Thank you for your business. Payment due within 14 days.</p>',
   subtotal: 4180,
-  taxTotal: 460,
-  grandTotal: 4520,
+  taxTotal: 0,
+  grandTotal: 4060,
   items: [
     {
       id: 'preview-1',
@@ -43,13 +32,13 @@ const previewBaseInvoice = {
       price: 1800,
       quantity: 1,
       unitType: 'project',
-      taxTypeIds: ['preview-tax'],
-      taxes: [{ id: 'preview-tax', title: 'VAT', percentage: 10 }],
-      taxRate: 10,
-      taxAmount: 180,
+      taxTypeIds: [],
+      taxes: [],
+      taxRate: 0,
+      taxAmount: 0,
       lineSubtotal: 1800,
-      lineGrandTotal: 1980,
-      taxLabel: 'VAT (10%)'
+      lineGrandTotal: 1800,
+      taxLabel: null
     },
     {
       id: 'preview-2',
@@ -57,13 +46,13 @@ const previewBaseInvoice = {
       price: 595,
       quantity: 4,
       unitType: 'screen',
-      taxTypeIds: ['preview-tax'],
-      taxes: [{ id: 'preview-tax', title: 'VAT', percentage: 10 }],
-      taxRate: 10,
-      taxAmount: 238,
+      taxTypeIds: [],
+      taxes: [],
+      taxRate: 0,
+      taxAmount: 0,
       lineSubtotal: 2380,
-      lineGrandTotal: 2618,
-      taxLabel: 'VAT (10%)'
+      lineGrandTotal: 2380,
+      taxLabel: null
     }
   ]
 };
@@ -121,7 +110,7 @@ export default function InvoiceTemplateSelectorModal({
                         <InvoiceDocument
                           locale={locale}
                           currency="USD"
-                          companyInfo={previewCompanyInfo}
+                          companyInfo={emptyInvoiceCompanyInfo}
                           invoice={{ ...previewBaseInvoice, templateId: template.id }}
                           className="shadow-none"
                         />

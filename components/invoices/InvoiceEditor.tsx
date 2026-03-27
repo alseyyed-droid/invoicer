@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -11,19 +11,14 @@ import InvoiceTemplateSelectorModal from '@/components/invoices/InvoiceTemplateS
 import { createInvoiceAction, updateInvoiceAction } from '@/lib/actions/invoices';
 import {
   calculateInvoiceTotals,
+  emptyInvoiceCompanyInfo,
   getIntlLocale,
   getLineSubtotal,
-  getLineTaxAmount,
   invoiceDiscountTypes,
-  invoiceTaxHandlingValues,
   invoiceTemplateIds,
   invoiceTemplates,
-  sanitizeNumber,
-  type InvoiceCompanyInfo,
   type InvoicePreviewData,
-  type InvoiceTaxOption,
-  type InvoiceTemplateId,
-  type SavedInvoiceItem
+  type InvoiceTemplateId
 } from '@/lib/invoices';
 import { formatCurrency } from '@/lib/utils';
 
@@ -35,15 +30,12 @@ const invoiceEditorSchema = z.object({
     .refine((value) => !value || z.string().email().safeParse(value).success, 'Enter a valid email address.'),
   invoiceDate: z.string().min(1, 'Invoice date is required.'),
   invoiceNumber: z.string().trim().min(1, 'Invoice number is required.'),
-  taxType: z.enum(invoiceTaxHandlingValues),
-  invoiceTaxTypeIds: z.array(z.string()),
   discountType: z.enum(invoiceDiscountTypes),
   discountValue: z.number().finite().min(0),
   items: z
     .array(
       z.object({
         id: z.string(),
-        savedItemId: z.string(),
         itemName: z.string().trim().min(1, 'Item name is required.'),
         price: z.number().finite().min(0, 'Price must be zero or greater.'),
         quantity: z.number().int().min(1, 'Quantity must be at least 1.'),
@@ -63,9 +55,6 @@ type InvoiceEditorProps = {
   mode: 'create' | 'edit';
   locale: string;
   currency: string;
-  companyInfo: InvoiceCompanyInfo;
-  savedItems: SavedInvoiceItem[];
-  taxTypes: InvoiceTaxOption[];
   initialInvoiceNumber: string;
   invoice?: InvoicePreviewData & { id?: string };
 };
@@ -78,57 +67,26 @@ const noteTools = [
   { label: '1.', command: 'insertOrderedList' }
 ] as const;
 
-function createEmptyItem(taxPerItem: boolean) {
+function createEmptyItem() {
   return {
     id: '',
-    savedItemId: '',
     itemName: '',
     price: 0,
     quantity: 1,
     unitType: '',
-    taxTypeIds: taxPerItem ? [''] as string[] : [] as string[],
+    taxTypeIds: [] as string[],
     taxRate: 0
   };
-}
-
-function findInvoiceLevelTaxTypeIds(
-  invoice: InvoicePreviewData | undefined,
-  taxTypes: InvoiceTaxOption[],
-  taxPerItem: boolean
-) {
-  if (!invoice || taxPerItem || invoice.taxType !== 'taxable') {
-    return [''];
-  }
-
-  const firstTaxIds = invoice.items[0]?.taxes?.map((tax) => tax.id).filter(Boolean) as string[] | undefined;
-  if (firstTaxIds?.length) {
-    return firstTaxIds;
-  }
-
-  const firstTaxRate = sanitizeNumber(invoice.items[0]?.taxRate);
-  const matchedTaxId = taxTypes.find((taxType) => taxType.percentage === firstTaxRate)?.id;
-  return matchedTaxId ? [matchedTaxId] : [''];
-}
-
-function getItemTaxRate(taxTypeIds: string[], taxTypes: InvoiceTaxOption[]) {
-  return taxTypeIds.reduce(
-    (sum, taxTypeId) => sum + (taxTypes.find((taxType) => taxType.id === taxTypeId)?.percentage ?? 0),
-    0
-  );
 }
 
 export default function InvoiceEditor({
   mode,
   locale,
   currency,
-  companyInfo,
-  savedItems,
-  taxTypes,
   initialInvoiceNumber,
   invoice
 }: InvoiceEditorProps) {
   const router = useRouter();
-  const currentLocale = useLocale();
   const intlLocale = getIntlLocale(locale);
   const t = useTranslations('invoices');
   const commonT = useTranslations('common');
@@ -136,7 +94,6 @@ export default function InvoiceEditor({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isTemplateSelectorOpen, setIsTemplateSelectorOpen] = useState(false);
   const [isSaving, startTransition] = useTransition();
-  const taxPerItem = companyInfo.taxPerItem;
 
   const {
     control,
@@ -152,21 +109,18 @@ export default function InvoiceEditor({
       customerEmail: invoice?.customerEmail ?? '',
       invoiceDate: invoice?.invoiceDate?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
       invoiceNumber: invoice?.invoiceNumber ?? initialInvoiceNumber,
-      taxType: invoice?.taxType ?? 'taxable',
-      invoiceTaxTypeIds: findInvoiceLevelTaxTypeIds(invoice, taxTypes, taxPerItem),
       discountType: invoice?.discountType ?? 'fixed',
       discountValue: invoice?.discountValue ?? 0,
       items:
         invoice?.items.map((item) => ({
           id: item.id ?? '',
-          savedItemId: item.savedItemId ?? '',
           itemName: item.itemName,
           price: item.price,
           quantity: item.quantity,
           unitType: item.unitType ?? '',
-          taxTypeIds: (item.taxes?.map((tax) => tax.id).filter(Boolean) as string[]) ?? [],
-          taxRate: item.taxRate
-        })) ?? [createEmptyItem(taxPerItem)],
+          taxTypeIds: [],
+          taxRate: 0
+        })) ?? [createEmptyItem()],
       notes: invoice?.notes ?? '',
       templateId: invoice?.templateId ?? 'minimalist'
     }
@@ -183,93 +137,45 @@ export default function InvoiceEditor({
   const watchedInvoiceNumber = watch('invoiceNumber');
   const watchedNotes = watch('notes');
   const watchedItems = watch('items');
-  const selectedTaxType = watch('taxType');
   const selectedTemplateId = watch('templateId');
-  const selectedInvoiceTaxTypeIds = watch('invoiceTaxTypeIds');
   const selectedDiscountType = watch('discountType');
   const selectedDiscountValue = watch('discountValue');
-  const selectedInvoiceTaxRate = selectedInvoiceTaxTypeIds.reduce(
-    (sum, taxTypeId) => sum + (taxTypes.find((taxType) => taxType.id === taxTypeId)?.percentage ?? 0),
-    0
-  );
   const selectedTemplate = invoiceTemplates.find((template) => template.id === selectedTemplateId);
   const totals = calculateInvoiceTotals({
     items: watchedItems,
-    invoiceTaxType: selectedTaxType,
-    taxPerItem,
-    invoiceTaxRate: selectedInvoiceTaxRate,
+    invoiceTaxType: 'tax_free',
+    taxPerItem: false,
+    invoiceTaxRate: 0,
     discountType: selectedDiscountType,
     discountValue: selectedDiscountValue
   });
 
-  useEffect(() => {
-    if (taxPerItem) {
-      return;
-    }
-
-    watchedItems.forEach((item, index) => {
-      if (item.taxTypeIds.length > 0) {
-        setValue(`items.${index}.taxTypeIds`, []);
-        setValue(`items.${index}.taxRate`, 0);
-      }
-    });
-  }, [setValue, taxPerItem, watchedItems]);
-
-  useEffect(() => {
-    if (taxPerItem) {
-      return;
-    }
-
-    if (selectedTaxType === 'taxable' && selectedInvoiceTaxTypeIds.length === 0) {
-      setValue('invoiceTaxTypeIds', ['']);
-    }
-  }, [selectedInvoiceTaxTypeIds.length, selectedTaxType, setValue, taxPerItem]);
-
   const previewInvoice = useMemo<InvoicePreviewData>(() => {
-    const invoiceTaxes = selectedInvoiceTaxTypeIds
-      .map((taxTypeId) => taxTypes.find((taxType) => taxType.id === taxTypeId))
-      .filter((tax): tax is InvoiceTaxOption => Boolean(tax));
-
     return {
       id: invoice?.id,
       invoiceNumber: watchedInvoiceNumber,
       invoiceDate: watchedInvoiceDate,
       customerName: watchedCustomerName,
       customerEmail: watchedCustomerEmail,
-      taxType: selectedTaxType,
+      taxType: 'tax_free',
       templateId: selectedTemplateId,
       discountType: selectedDiscountType,
       discountValue: selectedDiscountValue,
       discountAmount: totals.discountAmount,
       notes: watchedNotes,
       subtotal: totals.subtotal,
-      taxTotal: totals.taxTotal,
+      taxTotal: 0,
       grandTotal: totals.grandTotal,
       items: watchedItems.map((item) => {
-        const taxes = taxPerItem
-          ? item.taxTypeIds
-              .map((taxTypeId) => taxTypes.find((taxType) => taxType.id === taxTypeId))
-              .filter((tax): tax is InvoiceTaxOption => Boolean(tax))
-          : selectedTaxType === 'taxable' && invoiceTaxes.length
-            ? invoiceTaxes
-            : [];
         const lineSubtotal = getLineSubtotal(item);
-        const taxAmount = getLineTaxAmount({
-          item,
-          invoiceTaxType: selectedTaxType,
-          taxPerItem,
-          invoiceTaxRate: selectedInvoiceTaxRate
-        });
 
         return {
           ...item,
-          taxes,
-          taxAmount,
+          taxes: [],
+          taxAmount: 0,
           lineSubtotal,
-          lineGrandTotal: lineSubtotal + taxAmount,
-          taxLabel: taxes.length
-            ? taxes.map((tax) => `${tax.title} (${tax.percentage}%)`).join(', ')
-            : t('no_tax')
+          lineGrandTotal: lineSubtotal,
+          taxLabel: null
         };
       })
     };
@@ -277,17 +183,10 @@ export default function InvoiceEditor({
     invoice?.id,
     selectedDiscountType,
     selectedDiscountValue,
-    selectedInvoiceTaxRate,
-    selectedInvoiceTaxTypeIds,
-    selectedTaxType,
     selectedTemplateId,
-    taxPerItem,
-    taxTypes,
-    t,
     totals.discountAmount,
     totals.grandTotal,
     totals.subtotal,
-    totals.taxTotal,
     watchedCustomerEmail,
     watchedCustomerName,
     watchedInvoiceDate,
@@ -301,9 +200,26 @@ export default function InvoiceEditor({
 
     startTransition(async () => {
       const actionInput = {
-        ...values,
-        locale: currentLocale,
-        taxPerItem
+        locale,
+        customerName: values.customerName,
+        customerEmail: values.customerEmail,
+        invoiceDate: values.invoiceDate,
+        invoiceNumber: values.invoiceNumber,
+        taxType: 'tax_free' as const,
+        invoiceTaxTypeIds: [],
+        items: values.items.map((item) => ({
+          id: item.id,
+          itemName: item.itemName,
+          price: item.price,
+          quantity: item.quantity,
+          unitType: item.unitType,
+          taxTypeIds: []
+        })),
+        notes: values.notes,
+        templateId: values.templateId,
+        discountType: values.discountType,
+        discountValue: values.discountValue,
+        taxPerItem: false
       };
       const result =
         mode === 'edit' && invoice?.id
@@ -323,28 +239,9 @@ export default function InvoiceEditor({
     });
   };
 
-  const openPreview = () => {
-    setIsPreviewOpen(true);
-  };
-
   const submitFromPreview = () => {
     setIsPreviewOpen(false);
     void handleSubmit(submitInvoice)();
-  };
-
-  const applySavedItem = (index: number, savedItem: SavedInvoiceItem | null) => {
-    setValue(`items.${index}.savedItemId`, savedItem?.id ?? '', { shouldDirty: true });
-
-    if (!savedItem) {
-      return;
-    }
-
-    const defaultTaxIds = savedItem.taxTypeId ? [savedItem.taxTypeId] : [''];
-    setValue(`items.${index}.itemName`, savedItem.name, { shouldDirty: true, shouldValidate: true });
-    setValue(`items.${index}.price`, savedItem.price, { shouldDirty: true, shouldValidate: true });
-    setValue(`items.${index}.unitType`, savedItem.unitType, { shouldDirty: true });
-    setValue(`items.${index}.taxTypeIds`, defaultTaxIds, { shouldDirty: true });
-    setValue(`items.${index}.taxRate`, getItemTaxRate(defaultTaxIds, taxTypes), { shouldDirty: true });
   };
 
   return (
@@ -391,16 +288,6 @@ export default function InvoiceEditor({
               <input type="date" {...register('invoiceDate')} className="input px-4" />
               {errors.invoiceDate && <p className="mt-1 text-xs text-rose-600">{errors.invoiceDate.message}</p>}
             </div>
-            <div>
-              <label className="label">{t('tax_type')}</label>
-              <select {...register('taxType')} className="select px-4">
-                {invoiceTaxHandlingValues.map((value) => (
-                  <option key={value} value={value}>
-                    {t(`tax_type_options.${value}`)}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
         </section>
 
@@ -408,15 +295,15 @@ export default function InvoiceEditor({
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-500">
-                <span className="material-symbols-outlined">inventory_2</span>
+                <span className="material-symbols-outlined">description</span>
               </div>
               <div>
                 <h2 className="text-lg font-bold">{t('invoice_items')}</h2>
-                <p className="text-sm">{savedItems.length ? t('saved_item_mode') : t('manual_item_mode')}</p>
+                <p className="text-sm">{t('manual_entry_hint')}</p>
               </div>
             </div>
 
-            <button type="button" onClick={() => append(createEmptyItem(taxPerItem))} className="btn btn-secondary">
+            <button type="button" onClick={() => append(createEmptyItem())} className="btn btn-secondary">
               <span className="material-symbols-outlined">add</span>
               {t('add_item')}
             </button>
@@ -433,29 +320,8 @@ export default function InvoiceEditor({
 
           <div className="mt-4 space-y-4">
             {fields.map((field, index) => {
-              const row = watchedItems[index];
-              const currentLineSubtotal = getLineSubtotal(row ?? createEmptyItem(taxPerItem));
-              const currentTaxAmount = getLineTaxAmount({
-                item: row ?? createEmptyItem(taxPerItem),
-                invoiceTaxType: selectedTaxType,
-                taxPerItem,
-                invoiceTaxRate: selectedInvoiceTaxRate
-              });
-              const selectedTaxes =
-                row?.taxTypeIds
-                  .map((taxTypeId) => taxTypes.find((taxType) => taxType.id === taxTypeId))
-                  .filter((tax): tax is InvoiceTaxOption => Boolean(tax)) ?? [];
-              const taxDisplayLabel = taxPerItem
-                ? selectedTaxes.length
-                  ? selectedTaxes.map((tax) => `${tax.title} (${tax.percentage}%)`).join(', ')
-                  : t('no_tax')
-                : selectedTaxType === 'taxable'
-                  ? selectedInvoiceTaxTypeIds
-                      .map((taxTypeId) => taxTypes.find((taxType) => taxType.id === taxTypeId))
-                      .filter((tax): tax is InvoiceTaxOption => Boolean(tax))
-                      .map((tax) => `${tax.title} (${tax.percentage}%)`)
-                      .join(', ') || t('tax_not_selected')
-                  : t(`tax_type_options.${selectedTaxType}`);
+              const row = watchedItems[index] ?? createEmptyItem();
+              const currentLineSubtotal = getLineSubtotal(row);
 
               return (
                 <div
@@ -464,12 +330,10 @@ export default function InvoiceEditor({
                 >
                   <div>
                     <label className="label lg:hidden">{t('item')}</label>
-                    <ItemSearchField
-                      value={row?.itemName ?? ''}
-                      savedItems={savedItems}
-                      placeholder={t('placeholders.item_search')}
-                      onChange={(value) => setValue(`items.${index}.itemName`, value, { shouldDirty: true, shouldValidate: true })}
-                      onSelect={(savedItem) => applySavedItem(index, savedItem)}
+                    <input
+                      {...register(`items.${index}.itemName`)}
+                      className="input px-4"
+                      placeholder={t('placeholders.item_name')}
                     />
                     {errors.items?.[index]?.itemName && (
                       <p className="mt-1 text-xs text-rose-600">{errors.items[index]?.itemName?.message}</p>
@@ -494,7 +358,7 @@ export default function InvoiceEditor({
                   <div>
                     <label className="label lg:hidden">{t('total')}</label>
                     <div className="surface-inset rounded-xl px-4 py-2.5 text-sm font-semibold">
-                      {formatCurrency(currentLineSubtotal + currentTaxAmount, currency, intlLocale)}
+                      {formatCurrency(currentLineSubtotal, currency, intlLocale)}
                     </div>
                   </div>
 
@@ -502,31 +366,6 @@ export default function InvoiceEditor({
                     <button type="button" onClick={() => remove(index)} className="rounded-xl p-2 text-soft hover:bg-[var(--surface)] hover:text-rose-600">
                       <span className="material-symbols-outlined">delete</span>
                     </button>
-                  </div>
-
-                  <div className="lg:col-span-6">
-                    <label className="label">{t('tax')}</label>
-                    {taxPerItem ? (
-                      <RepeatableTaxFields
-                        options={taxTypes}
-                        values={row?.taxTypeIds?.length ? row.taxTypeIds : ['']}
-                        selectPlaceholder={t('select_tax_type')}
-                        addLabel={t('add_tax')}
-                        removeLabel={t('remove_tax')}
-                        onChange={(taxTypeIds) => {
-                          setValue(`items.${index}.taxTypeIds`, taxTypeIds, { shouldDirty: true });
-                          setValue(
-                            `items.${index}.taxRate`,
-                            getItemTaxRate(taxTypeIds.filter(Boolean), taxTypes),
-                            { shouldDirty: true }
-                          );
-                        }}
-                      />
-                    ) : (
-                      <div className="surface-inset flex h-[42px] items-center rounded-xl px-4 py-2.5 text-sm">
-                        {taxDisplayLabel}
-                      </div>
-                    )}
                   </div>
                 </div>
               );
@@ -583,27 +422,6 @@ export default function InvoiceEditor({
               </div>
             </div>
 
-            {!taxPerItem && (
-              <div className="mb-5">
-                <label className="label">{t('invoice_tax')}</label>
-                <RepeatableTaxFields
-                  options={taxTypes}
-                  values={selectedInvoiceTaxTypeIds.length ? selectedInvoiceTaxTypeIds : ['']}
-                  disabled={selectedTaxType !== 'taxable'}
-                  selectPlaceholder={selectedTaxType === 'taxable' ? t('select_tax_type') : t('tax_not_applicable')}
-                  addLabel={t('add_tax')}
-                  removeLabel={t('remove_tax')}
-                  onChange={(taxTypeIds) => setValue('invoiceTaxTypeIds', taxTypeIds, { shouldDirty: true })}
-                />
-              </div>
-            )}
-
-            {taxPerItem && (
-              <div className="mb-5 rounded-2xl border border-dashed border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm text-emerald-700">
-                {t('item_tax_notice')}
-              </div>
-            )}
-
             <div className="mb-5 grid grid-cols-2 gap-3">
               <div>
                 <label className="label">{t('discount_type')}</label>
@@ -628,10 +446,6 @@ export default function InvoiceEditor({
                   <span>{formatCurrency(totals.subtotal, currency, intlLocale)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>{t('tax_total')}</span>
-                  <span>{formatCurrency(totals.taxTotal, currency, intlLocale)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
                   <span>{t('discount')}</span>
                   <span>-{formatCurrency(totals.discountAmount, currency, intlLocale)}</span>
                 </div>
@@ -645,7 +459,7 @@ export default function InvoiceEditor({
             {submitError && <div className="alert-error mt-6">{submitError}</div>}
 
             <div className="mt-6 flex flex-col gap-3">
-              <button type="button" onClick={openPreview} className="btn btn-secondary w-full justify-center">
+              <button type="button" onClick={() => setIsPreviewOpen(true)} className="btn btn-secondary w-full justify-center">
                 <span className="material-symbols-outlined">visibility</span>
                 {t('preview')}
               </button>
@@ -667,7 +481,7 @@ export default function InvoiceEditor({
         <InvoicePreviewModal
           locale={locale}
           currency={currency}
-          companyInfo={companyInfo}
+          companyInfo={emptyInvoiceCompanyInfo}
           invoice={previewInvoice}
           onClose={() => setIsPreviewOpen(false)}
           onConfirm={mode === 'create' ? submitFromPreview : undefined}
@@ -738,154 +552,6 @@ function RichTextField({
         data-placeholder={placeholder}
         className="min-h-[220px] px-4 py-4 text-sm leading-7 text-[color:var(--text)] outline-none"
       />
-    </div>
-  );
-}
-
-function ItemSearchField({
-  value,
-  savedItems,
-  placeholder,
-  onChange,
-  onSelect
-}: {
-  value: string;
-  savedItems: SavedInvoiceItem[];
-  placeholder: string;
-  onChange: (value: string) => void;
-  onSelect: (item: SavedInvoiceItem | null) => void;
-}) {
-  const t = useTranslations('invoices');
-  const [isOpen, setIsOpen] = useState(false);
-  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const filteredItems = savedItems.filter((item) =>
-    item.name.toLowerCase().includes(value.trim().toLowerCase())
-  );
-
-  useEffect(() => {
-    return () => {
-      if (blurTimeoutRef.current) {
-        clearTimeout(blurTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  return (
-    <div className="relative">
-      <input
-        value={value}
-        onChange={(event) => {
-          onChange(event.target.value);
-          onSelect(null);
-          setIsOpen(true);
-        }}
-        onFocus={() => setIsOpen(true)}
-        onBlur={() => {
-          blurTimeoutRef.current = setTimeout(() => setIsOpen(false), 120);
-        }}
-        className="input px-4"
-        placeholder={placeholder}
-      />
-
-      {isOpen && savedItems.length > 0 && (
-        <div className="absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-xl">
-          <div className="max-h-64 overflow-y-auto p-2">
-            {filteredItems.length > 0 ? (
-              filteredItems.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => {
-                    onChange(item.name);
-                    onSelect(item);
-                    setIsOpen(false);
-                  }}
-                  className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left hover:bg-[var(--bg)]"
-                >
-                  <div>
-                    <p className="text-sm font-semibold text-[color:var(--text)]">{item.name}</p>
-                    <p className="text-xs text-muted">{item.unitType}</p>
-                  </div>
-                  <span className="text-xs font-medium text-emerald-600">
-                    {item.taxType ? `${item.taxType.title} (${item.taxType.percentage}%)` : t('no_tax')}
-                  </span>
-                </button>
-              ))
-            ) : (
-              <div className="rounded-xl px-3 py-3 text-sm text-muted">{t('use_typed_item')}</div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function RepeatableTaxFields({
-  options,
-  values,
-  selectPlaceholder,
-  addLabel,
-  removeLabel,
-  disabled = false,
-  onChange
-}: {
-  options: InvoiceTaxOption[];
-  values: string[];
-  selectPlaceholder: string;
-  addLabel: string;
-  removeLabel: string;
-  disabled?: boolean;
-  onChange: (values: string[]) => void;
-}) {
-  const effectiveValues = values.length ? values : [''];
-
-  return (
-      <div className="space-y-2 lg:max-w-[30vw]">
-        {effectiveValues.map((value, index) => (
-          <div key={`${value}-${index}`} className="flex items-center gap-2">
-          <select
-            value={value}
-            disabled={disabled}
-            onChange={(event) => {
-              const nextValues = [...effectiveValues];
-              nextValues[index] = event.target.value;
-              onChange(nextValues);
-            }}
-            className="select h-[42px] flex-1 px-4"
-          >
-            <option value="">{selectPlaceholder}</option>
-            {options.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.title} ({option.percentage}%)
-              </option>
-            ))}
-          </select>
-
-          {index === effectiveValues.length - 1 && !disabled && (
-            <button
-              type="button"
-              onClick={() => onChange([...effectiveValues, ''])}
-              aria-label={addLabel}
-              className="btn btn-secondary h-[42px] w-[42px] shrink-0 px-0"
-            >
-              <span className="material-symbols-outlined">add</span>
-            </button>
-          )}
-
-          {effectiveValues.length > 1 && !disabled && (
-            <button
-              type="button"
-              onClick={() => onChange(effectiveValues.filter((_, valueIndex) => valueIndex !== index))}
-              aria-label={removeLabel}
-              className="btn btn-secondary h-[42px] w-[42px] shrink-0 px-0 text-rose-600 hover:border-rose-200 hover:bg-rose-50/70"
-            >
-              <span className="material-symbols-outlined">remove</span>
-            </button>
-          )}
-        </div>
-      ))}
     </div>
   );
 }

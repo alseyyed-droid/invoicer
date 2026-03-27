@@ -18,6 +18,18 @@ export const lightInvoiceThemeStyle: InvoiceThemeStyle = {
   colorScheme: 'light'
 };
 
+export function hasCompanyDetails(companyInfo: InvoiceCompanyInfo) {
+  return Boolean(
+    companyInfo.companyName ||
+      companyInfo.companyEmail ||
+      companyInfo.address ||
+      companyInfo.city ||
+      companyInfo.country ||
+      companyInfo.postalCode ||
+      companyInfo.companyLogo
+  );
+}
+
 export function CompanyLogo({
   companyInfo,
   companyInitial,
@@ -31,6 +43,10 @@ export function CompanyLogo({
   imageClassName?: string;
   fallbackClassName?: string;
 }) {
+  if (!hasCompanyDetails(companyInfo)) {
+    return null;
+  }
+
   if (companyInfo.companyLogo) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
@@ -228,7 +244,7 @@ export function InvoiceItemsTable({
               </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-3 gap-3">
+            <div className="mt-5 grid grid-cols-2 gap-3">
               <CreativeSummaryCard
                 label={t('price')}
                 value={formatCurrency(item.price, currency, intlLocale)}
@@ -238,11 +254,6 @@ export function InvoiceItemsTable({
                 label={t('quantity')}
                 value={String(item.quantity)}
                 accentClassName="border-teal-200 bg-teal-50 text-teal-900"
-              />
-              <CreativeSummaryCard
-                label={t('tax')}
-                value={item.taxLabel || t('no_tax')}
-                accentClassName="border-amber-200 bg-amber-50 text-amber-900"
               />
             </div>
           </article>
@@ -258,7 +269,7 @@ export function InvoiceItemsTable({
           <table className="w-full min-w-[700px] border-collapse text-left">
             <thead className="bg-[color:color-mix(in_srgb,var(--surface)_8%,transparent)]">
               <tr>
-                {['item', 'price', 'quantity', 'tax', 'total'].map((key) => (
+                {['item', 'price', 'quantity', 'total'].map((key) => (
                   <th
                     key={key}
                     className="px-5 py-4 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:color-mix(in_srgb,var(--surface)_55%,transparent)]"
@@ -287,9 +298,6 @@ export function InvoiceItemsTable({
                   </td>
                   <td className="px-5 py-4 align-top font-mono text-sm text-[color:color-mix(in_srgb,var(--surface)_82%,transparent)]">
                     {item.quantity}
-                  </td>
-                  <td className="px-5 py-4 align-top text-sm text-[color:color-mix(in_srgb,var(--surface)_72%,transparent)]">
-                    {item.taxLabel || t('no_tax')}
                   </td>
                   <td className="px-5 py-4 align-top font-mono text-sm font-semibold text-emerald-300">
                     {formatCurrency(item.lineGrandTotal, currency, intlLocale)}
@@ -347,7 +355,7 @@ export function InvoiceItemsTable({
         <table className={tableClassName}>
           <thead className={headClassName}>
             <tr>
-              {['item', 'price', 'quantity', 'tax', 'total'].map((key) => (
+              {['item', 'price', 'quantity', 'total'].map((key) => (
                 <th
                   key={key}
                   className={cn(
@@ -380,7 +388,6 @@ export function InvoiceItemsTable({
                   {formatCurrency(item.price, currency, intlLocale)}
                 </td>
                 <td className={cn(bodyCellClassName, cellClassName)}>{item.quantity}</td>
-                <td className={cn(bodyCellClassName, cellClassName)}>{item.taxLabel || t('no_tax')}</td>
                 <td className={cn(bodyCellClassName, 'font-semibold', cellClassName)}>
                   {formatCurrency(item.lineGrandTotal, currency, intlLocale)}
                 </td>
@@ -467,10 +474,6 @@ export function TotalsCard({
         <div className="flex items-center justify-between gap-4">
           <span className={labelClassName}>{t('subtotal')}</span>
           <span className={valueClassName}>{formatCurrency(invoice.subtotal, currency, intlLocale)}</span>
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <span className={labelClassName}>{t('tax_total')}</span>
-          <span className={valueClassName}>{formatCurrency(invoice.taxTotal, currency, intlLocale)}</span>
         </div>
         <div className="flex items-center justify-between gap-4">
           <span className={labelClassName}>{t('discount')}</span>

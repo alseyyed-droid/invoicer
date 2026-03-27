@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-import { getCompanySetupPath, requireAuth } from '@/auth';
+import { requireAuth } from '@/auth';
 import SettingsLayout from '@/components/settings/SettingsLayout';
 import { isSettingsSection } from '@/components/settings/sections';
 import { prisma } from '@/lib/prisma';
@@ -16,20 +15,14 @@ export default async function SettingsPage({
 }) {
   const { locale } = await Promise.resolve(params);
   const resolvedSearchParams = searchParams ? await Promise.resolve(searchParams) : undefined;
-  const session = await requireAuth(locale, { enforceCompanySetup: false });
+  const session = await requireAuth(locale);
   const rawSection = Array.isArray(resolvedSearchParams?.section)
     ? resolvedSearchParams?.section[0]
     : resolvedSearchParams?.section;
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
     include: {
-      companyInfo: true,
-      preferences: true,
-      taxTypes: {
-        orderBy: {
-          createdAt: 'desc'
-        }
-      }
+      preferences: true
     }
   });
 
@@ -37,40 +30,21 @@ export default async function SettingsPage({
     return null;
   }
 
-  const { companyInfo, preferences } =
-    user.companyInfo && user.preferences
-      ? { companyInfo: user.companyInfo, preferences: user.preferences }
-      : await ensureUserData(user.id, user.locale ?? locale);
-  const hasCompletedSetup = Boolean(companyInfo.companyName?.trim());
+  const { preferences } = user.preferences
+    ? { preferences: user.preferences }
+    : await ensureUserData(user.id, user.locale ?? locale);
   const activeSection = rawSection && isSettingsSection(rawSection)
     ? rawSection
-    : hasCompletedSetup
-      ? 'profile'
-      : 'company';
-
-  if (!hasCompletedSetup && activeSection !== 'company') {
-    redirect(getCompanySetupPath(locale));
-  }
+    : 'profile';
 
   return (
     <SettingsLayout
       locale={locale}
       activeSection={activeSection}
-      isOnboarding={!hasCompletedSetup}
       user={{
         name: user.name,
         email: user.email,
         mobileNumber: user.mobileNumber
-      }}
-      company={{
-        companyName: companyInfo.companyName,
-        country: companyInfo.country,
-        city: companyInfo.city,
-        companyEmail: companyInfo.companyEmail,
-        address: companyInfo.address,
-        postalCode: companyInfo.postalCode,
-        companyLogo: companyInfo.companyLogo,
-        taxPerItem: companyInfo.taxPerItem
       }}
       preferences={{
         language: preferences.language,
@@ -85,12 +59,6 @@ export default async function SettingsPage({
         invoiceSeparator: preferences.invoiceSeparator,
         invoiceNumberLength: preferences.invoiceNumberLength
       }}
-      taxTypes={user.taxTypes.map((taxType) => ({
-        id: taxType.id,
-        title: taxType.title,
-        percentage: taxType.percentage,
-        description: taxType.description ?? ''
-      }))}
     />
   );
 }

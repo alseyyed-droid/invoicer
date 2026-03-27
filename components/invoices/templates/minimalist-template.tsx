@@ -3,6 +3,7 @@ import type { InvoiceRenderContext, TemplateRenderer } from './template-types';
 import {
   CompanyDetails,
   CompanyLogo,
+  hasCompanyDetails,
   InvoiceItemsTable,
   lightInvoiceThemeStyle,
   MetaPanel,
@@ -22,32 +23,45 @@ export const minimalistTemplate: TemplateRenderer = {
 };
 
 export function renderMinimalistTemplate(context: InvoiceRenderContext) {
+  const showCompany = hasCompanyDetails(context.companyInfo);
+
   return (
     <div className="space-y-8" style={{ zoom: 0.85 }}>
       <section className="grid gap-8 border-b border-[var(--border)] pb-8 print:grid-cols-[minmax(0,1.3fr)_320px] md:grid-cols-[minmax(0,1.3fr)_320px]">
         <div>
-          <div className="flex items-start gap-4">
-            <CompanyLogo
-              companyInfo={context.companyInfo}
-              companyInitial={context.companyInitial}
-              className="h-16 w-16 rounded-[22px]"
-              fallbackClassName="border border-[var(--border)] bg-[color:color-mix(in_srgb,var(--surface)_60%,var(--bg))] text-[color:var(--text)]"
-            />
+          {showCompany ? (
+            <div className="flex items-start gap-4">
+              <CompanyLogo
+                companyInfo={context.companyInfo}
+                companyInitial={context.companyInitial}
+                className="h-16 w-16 rounded-[22px]"
+                fallbackClassName="border border-[var(--border)] bg-[color:color-mix(in_srgb,var(--surface)_60%,var(--bg))] text-[color:var(--text)]"
+              />
 
+              <div>
+                <p className="text-muted text-[11px] font-semibold uppercase tracking-[0.28em]">
+                  {context.t('invoice_document')}
+                </p>
+                <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-[color:var(--text)]">
+                  {context.companyInfo.companyName}
+                </h1>
+                <CompanyDetails
+                  companyInfo={context.companyInfo}
+                  companyLocation={context.companyLocation}
+                  className="text-muted mt-4 space-y-1 text-sm"
+                />
+              </div>
+            </div>
+          ) : (
             <div>
               <p className="text-muted text-[11px] font-semibold uppercase tracking-[0.28em]">
                 {context.t('invoice_document')}
               </p>
               <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-[color:var(--text)]">
-                {context.companyInfo.companyName || context.t('company_placeholder')}
+                {context.t('invoice_document')}
               </h1>
-              <CompanyDetails
-                companyInfo={context.companyInfo}
-                companyLocation={context.companyLocation}
-                className="text-muted mt-4 space-y-1 text-sm"
-              />
             </div>
-          </div>
+          )}
         </div>
 
         <div className="grid gap-4">
@@ -84,14 +98,10 @@ export function renderMinimalistTemplate(context: InvoiceRenderContext) {
           {context.invoice.customerEmail && <p className="text-muted mt-2 text-sm">{context.invoice.customerEmail}</p>}
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <SummaryStat
             label={context.t('subtotal')}
             value={formatCurrency(context.invoice.subtotal, context.currency, context.intlLocale)}
-          />
-          <SummaryStat
-            label={context.t('tax_total')}
-            value={formatCurrency(context.invoice.taxTotal, context.currency, context.intlLocale)}
           />
           <SummaryStat
             label={context.t('discount')}
